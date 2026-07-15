@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TechShoor Agri - Applied Research in Satellite Imagery &amp; Agricultural AI</title>
+<meta name="description" content="TechShoor Agri is an applied research group studying satellite imagery and deep learning for agriculture - multi-spectral vision-language models, crop-disease detection, plant-stress monitoring and open geospatial benchmarks." />
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBjMjQxOCIvPjxwYXRoIGQ9Ik03IDI1QzcgMTQgMTQgNyAyNSA3YzAgMTEtNyAxOC0xOCAxOFoiIGZpbGw9IiNiZmYyNGEiLz48cGF0aCBkPSJNOS42IDIyLjRjNC0uNyA3LjMtNCA4LTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzBjMjQxOCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==" />
+<meta name="theme-color" content="#0c2418" />
+<!-- Social share (set og:url to your live domain; add an absolute og:image URL when you have a cover image) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="TechShoor Agri" />
+<meta property="og:title" content="TechShoor Agri - Applied Research in Satellite Imagery &amp; Agricultural AI" />
+<meta property="og:description" content="An applied research group studying multi-spectral vision-language models, crop-disease detection and open geospatial benchmarks for agriculture." />
+<meta property="og:url" content="https://techshoor.com/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="TechShoor Agri - Applied Research in Satellite Imagery &amp; Agricultural AI" />
+<meta name="twitter:description" content="Researching how AI reads the land: multi-spectral models, crop-disease detection and open geospatial benchmarks." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,600&family=Sora:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --ink:#0c2418;          /* deep agricultural green (text + dark sections) */
+    --ink-soft:#163322;
+    --canvas:#f5f1e6;       /* warm paper */
+    --canvas-2:#efe9d9;
+    --card:#fffdf6;         /* card on paper */
+    --cream:#eef3e6;        /* text on dark */
+    --cream-dim:rgba(238,243,230,.62);
+    --lime:#bff24a;         /* AI / scan accent */
+    --lime-deep:#9bd32f;
+    --leaf:#2f8a55;
+    --leaf-bright:#46b06c;
+    --harvest:#ef7a2c;      /* brand-nod orange */
+    --sky:#34bdd6;          /* water/data blue */
+    --soil:#7a623f;
+    --muted:rgba(12,36,24,.60);
+    --line:rgba(12,36,24,.12);
+    --line-dark:rgba(238,243,230,.14);
+    --shadow:0 26px 60px -28px rgba(12,36,24,.45);
+    --shadow-sm:0 12px 30px -18px rgba(12,36,24,.5);
+    --r:22px;
+    --r-lg:30px;
+    --maxw:1220px;
+    --pad:clamp(1.2rem,4vw,2.6rem);
+    --sec:clamp(4.5rem,9vw,8rem);
+    --head-h:74px;
+  }
+
+  /* ============ RESET ============ */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:calc(var(--head-h) + 18px);-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Sora",system-ui,sans-serif;
+    background:var(--canvas);
+    color:var(--ink);
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:inherit;text-decoration:none}
+  img,svg{display:block;max-width:100%}
+  ul{list-style:none}
+  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  section{position:relative}
+  ::selection{background:var(--lime);color:var(--ink)}
+  .skip{position:fixed;left:1rem;top:-70px;z-index:10000;background:var(--ink);color:var(--lime);padding:.7rem 1.1rem;border-radius:10px;font-weight:600;font-size:.9rem;transition:top .25s}
+  .skip:focus{top:1rem;outline:2px solid var(--lime);outline-offset:2px}
+
+  /* ============ HELPERS ============ */
+  .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+  .eyebrow{
+    font-family:"Space Mono",monospace;
+    text-transform:uppercase;
+    letter-spacing:.22em;
+    font-size:.72rem;
+    color:var(--leaf);
+    display:inline-flex;align-items:center;gap:.6rem;
+    font-weight:700;
+  }
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--lime-deep);display:inline-block}
+  .dark .eyebrow{color:var(--lime)}
+  .dark .eyebrow::before{background:var(--lime)}
+  h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;font-weight:600;line-height:1.04;letter-spacing:-.01em}
+  .display{font-size:clamp(2.6rem,6.4vw,5rem);font-weight:600}
+  .sec-title{font-size:clamp(2rem,4.4vw,3.4rem);font-weight:600;line-height:1.05}
+  .ital{font-style:italic;font-weight:500}
+  .accent{color:var(--harvest)}
+  .accent-lime{color:var(--lime-deep)}
+  .dark .accent-lime{color:var(--lime)}
+  .lead{font-size:clamp(1rem,1.4vw,1.18rem);color:var(--muted);max-width:52ch}
+  .dark{background:var(--ink);color:var(--cream)}
+  .dark .lead,.dark .muted{color:var(--cream-dim)}
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    --bg:var(--lime);--fg:var(--ink);
+    display:inline-flex;align-items:center;gap:.6rem;
+    background:var(--bg);color:var(--fg);
+    font-weight:600;font-size:.95rem;
+    padding:.86rem 1.5rem;border-radius:50px;
+    position:relative;overflow:hidden;isolation:isolate;
+    transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,background .3s;
+    box-shadow:0 10px 24px -12px rgba(155,211,47,.7);
+  }
+  .btn .arr{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .btn::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-130%);transition:transform .6s}
+  .btn:hover{transform:translateY(-3px);box-shadow:0 18px 36px -14px rgba(155,211,47,.85)}
+  .btn:hover .arr{transform:translateX(4px)}
+  .btn:hover::after{transform:translateX(130%)}
+  .btn-ghost{
+    background:transparent;color:var(--ink);
+    border:1.5px solid var(--line);box-shadow:none;
+  }
+  .dark .btn-ghost{color:var(--cream);border-color:var(--line-dark)}
+  .btn-ghost::after{display:none}
+  .btn-ghost:hover{background:var(--ink);color:var(--canvas);border-color:var(--ink);box-shadow:var(--shadow-sm)}
+  .dark .btn-ghost:hover{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+
+  /* ============ GRAIN OVERLAY ============ */
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.045;mix-blend-mode:multiply}
+
+  /* ============ TOPBAR ============ */
+  .topbar{background:var(--ink);color:var(--cream);font-size:.82rem}
+  .topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-block:.55rem;flex-wrap:wrap}
+  .topbar ul{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap}
+  .topbar li{display:inline-flex;align-items:center;gap:.5rem;color:var(--cream-dim)}
+  .topbar li b{color:var(--cream);font-weight:600}
+  .topbar a:hover{color:var(--lime)}
+  .topbar svg{width:15px;height:15px;fill:var(--lime);flex:none}
+  .socials{display:flex;gap:.45rem}
+  .socials a{width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line-dark);border-radius:50%;transition:.3s}
+  .socials svg{width:14px;height:14px;fill:var(--cream)}
+  .socials a:hover{background:var(--lime);border-color:var(--lime);transform:translateY(-2px)}
+  .socials a:hover svg{fill:var(--ink)}
+
+  /* ============ NAV ============ */
+  header.nav{position:sticky;top:0;z-index:1000;transition:background .35s,box-shadow .35s,backdrop-filter .35s;border-bottom:1px solid transparent}
+  header.nav.scrolled{background:rgba(245,241,230,.82);backdrop-filter:blur(14px);box-shadow:0 10px 30px -22px rgba(12,36,24,.5);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:var(--head-h);gap:1rem}
+  .brand{display:flex;align-items:center;gap:.6rem;font-family:"Fraunces",serif;font-size:1.45rem;font-weight:700;letter-spacing:-.02em}
+  .brand .mark{width:38px;height:38px;border-radius:11px;background:var(--ink);display:grid;place-items:center;flex:none;position:relative;overflow:hidden}
+  .brand .mark svg{width:22px;height:22px;fill:var(--lime)}
+  .brand .mark::after{content:"";position:absolute;left:-40%;top:0;width:30%;height:100%;background:linear-gradient(90deg,transparent,rgba(191,242,74,.5),transparent);animation:scanH 3.4s ease-in-out infinite}
+  .brand b{font-weight:700}
+  .brand span{color:var(--leaf);font-weight:500}
+  .menu{display:flex;align-items:center;gap:2rem}
+  .menu a{font-size:.94rem;font-weight:500;position:relative;padding:.2rem 0;color:var(--ink)}
+  .menu a::after{content:"";position:absolute;left:0;bottom:-3px;height:2px;width:0;background:var(--lime-deep);transition:width .3s}
+  .menu a:hover::after,.menu a.active::after{width:100%}
+  .nav-actions{display:flex;align-items:center;gap:1rem}
+  .hamburger{display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;flex-direction:column;gap:5px;align-items:center;justify-content:center}
+  .hamburger span{width:20px;height:2px;background:var(--ink);transition:.3s}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  /* ============ HERO ============ */
+  .hero{padding-top:clamp(2.5rem,5vw,4.5rem);padding-bottom:var(--sec);overflow:hidden}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}
+  .hero-copy h1{margin:1.1rem 0 .4rem}
+  .hero-copy .tag{font-family:"Space Mono",monospace;font-size:1.05rem;color:var(--leaf);font-weight:700;letter-spacing:.02em;margin-bottom:1.6rem}
+  .hero-actions{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:.4rem}
+  .hero-meta{display:flex;gap:2rem;margin-top:2.6rem;flex-wrap:wrap}
+  .hero-meta .m b{font-family:"Fraunces",serif;font-size:1.8rem;font-weight:700;display:block;line-height:1}
+  .hero-meta .m span{font-size:.8rem;color:var(--muted);font-family:"Space Mono",monospace;text-transform:uppercase;letter-spacing:.1em}
+  .hero-meta .m{border-left:2px solid var(--lime-deep);padding-left:.9rem}
+
+  /* hero load anim */
+  .pre{opacity:0;transform:translateY(26px);animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards}
+  .pre.d1{animation-delay:.05s}.pre.d2{animation-delay:.18s}.pre.d3{animation-delay:.31s}
+  .pre.d4{animation-delay:.44s}.pre.d5{animation-delay:.57s}.pre.d6{animation-delay:.7s}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  /* ---- HERO SCAN VISUAL ---- */
+  .scope{position:relative;width:100%;max-width:560px;margin-inline:auto;
+    opacity:0;transform:translateY(30px) scale(.97);animation:rise 1s cubic-bezier(.2,.8,.2,1) .5s forwards}
+  .scene{display:block;width:100%;height:auto;position:relative;z-index:2;
+    filter:drop-shadow(0 34px 46px rgba(16,48,34,.34));animation:floaty 7s ease-in-out infinite}
+
+  /* reticle corners */
+  .reticle{position:absolute;inset:2%;pointer-events:none;z-index:4}
+  .reticle i{position:absolute;width:26px;height:26px;border:2px solid var(--lime)}
+  .reticle i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0}
+  .reticle i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0}
+  .reticle i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0}
+  .reticle i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0}
+  .coord{position:absolute;left:9%;bottom:2%;z-index:5;font-family:"Space Mono",monospace;font-size:.66rem;color:var(--muted);letter-spacing:.06em;font-weight:700}
+
+  /* floating data chips */
+  .chip{position:absolute;z-index:7;background:rgba(10,24,17,.78);backdrop-filter:blur(8px);
+    border:1px solid rgba(238,243,230,.16);border-radius:13px;padding:.5rem .7rem;
+    font-family:"Space Mono",monospace;color:var(--cream);box-shadow:0 14px 30px -16px rgba(0,0,0,.7);
+    animation:floaty 6s ease-in-out infinite}
+  .chip .k{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim);display:block}
+  .chip .v{font-size:.92rem;font-weight:700;display:flex;align-items:center;gap:.4rem;margin-top:.1rem}
+  .chip .dot{width:8px;height:8px;border-radius:50%;animation:ping 1.8s ease-out infinite}
+  .chip.c1{top:14%;left:-6%;animation-delay:.2s}
+  .chip.c2{top:40%;right:-8%;animation-delay:1.1s}
+  .chip.c3{bottom:16%;left:-4%;animation-delay:.7s}
+  .dot.green{background:var(--lime);box-shadow:0 0 0 0 var(--lime)}
+  .dot.orange{background:var(--harvest)}
+  .dot.blue{background:var(--sky)}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(191,242,74,.6)}100%{box-shadow:0 0 0 9px rgba(191,242,74,0)}}
+
+  /* spotlight follow */
+  .spot{position:absolute;width:380px;height:380px;border-radius:50%;pointer-events:none;z-index:1;
+    background:radial-gradient(circle,rgba(191,242,74,.18),transparent 65%);transform:translate(-50%,-50%);opacity:0;transition:opacity .4s}
+
+  /* ============ SECTION DIVIDER / INDEX ============ */
+  .sec-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:end;margin-bottom:clamp(2.4rem,4vw,3.6rem)}
+  .sec-head .idx{font-family:"Space Mono",monospace;font-size:.8rem;color:var(--muted);writing-mode:vertical-rl;letter-spacing:.2em;align-self:start;padding-top:.4rem}
+  .dark .sec-head .idx{color:var(--cream-dim)}
+  .sec-head .hl{grid-column:2}
+  .sec-head .lead{margin-top:1rem}
+
+  /* contour deco */
+  .contour{position:absolute;inset:0;pointer-events:none;opacity:.5;overflow:hidden}
+  .contour svg{position:absolute;width:140%;height:140%}
+  .dark .contour{opacity:.6}
+
+  /* ============ DETECT (crops) ============ */
+  .detect{padding-block:var(--sec)}
+  .crop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+  .crop{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.8rem 1.3rem 1.4rem;text-align:center;position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s,border-color .4s}
+  .crop:hover{transform:translateY(-8px);box-shadow:var(--shadow);border-color:rgba(155,211,47,.6)}
+  .crop .med{width:96px;height:96px;margin:0 auto 1rem;border-radius:50%;display:grid;place-items:center;position:relative;
+    background:radial-gradient(circle at 50% 40%,#fff,var(--canvas-2));box-shadow:inset 0 0 0 1px var(--line)}
+  .crop .med::before{content:"";position:absolute;inset:6px;border-radius:50%;border:1.5px dashed rgba(155,211,47,.55);
+    transition:transform .9s cubic-bezier(.2,.8,.2,1);opacity:0}
+  .crop:hover .med::before{opacity:1;transform:rotate(140deg)}
+  .crop .emoji{font-size:2.7rem;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,.12));transition:transform .4s}
+  .crop:hover .emoji{transform:scale(1.12) rotate(-6deg)}
+  .crop h4{font-size:1.18rem;margin-bottom:.5rem}
+  .crop .go{font-family:"Space Mono",monospace;font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;color:var(--leaf);display:inline-flex;align-items:center;gap:.4rem;transition:gap .3s}
+  .crop:hover .go{gap:.7rem;color:var(--harvest)}
+  .crop .scanbar{position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--lime),transparent);transform:translateX(-100%);transition:transform .6s}
+  .crop:hover .scanbar{transform:translateX(100%)}
+
+  /* ============ ABOUT ============ */
+  .about{padding-block:var(--sec)}
+  .about .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(2.2rem,5vw,4.5rem);align-items:center}
+  .about-visual{position:relative}
+  .globe{aspect-ratio:1;border-radius:50%;position:relative;overflow:hidden;max-width:420px;margin-inline:auto;
+    background:radial-gradient(circle at 35% 30%,#16432b,#0a1d14 75%);box-shadow:inset 0 0 60px rgba(0,0,0,.5),var(--shadow)}
+  .globe::before{content:"";position:absolute;inset:0;border-radius:50%;
+    background:
+      radial-gradient(28% 22% at 30% 38%,rgba(70,176,108,.85),transparent 60%),
+      radial-gradient(22% 30% at 66% 30%,rgba(155,211,47,.6),transparent 60%),
+      radial-gradient(30% 24% at 58% 70%,rgba(52,189,214,.5),transparent 60%),
+      radial-gradient(20% 18% at 24% 72%,rgba(239,122,44,.6),transparent 60%)}
+  .globe-grid{position:absolute;inset:0;border-radius:50%;opacity:.35;
+    background-image:repeating-linear-gradient(0deg,transparent 0 26px,rgba(238,243,230,.18) 26px 27px),repeating-linear-gradient(90deg,transparent 0 26px,rgba(238,243,230,.12) 26px 27px);
+    mask:radial-gradient(circle,#000 60%,transparent 78%)}
+  .globe .ring{position:absolute;inset:-12%;border-radius:50%;border:1.5px dashed rgba(191,242,74,.45);animation:spin 26s linear infinite}
+  .globe .ring2{position:absolute;inset:-4%;border-radius:50%;border:1px solid rgba(238,243,230,.18);animation:spin 40s linear infinite reverse}
+  .globe .pin{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 4px rgba(191,242,74,.25),0 0 14px var(--lime);animation:ping 2.2s infinite}
+  .globe .pin.p1{top:34%;left:40%}.globe .pin.p2{top:58%;left:62%;background:var(--harvest);box-shadow:0 0 0 4px rgba(239,122,44,.25),0 0 14px var(--harvest)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .about-chip{position:absolute;background:rgba(10,24,17,.82);border:1px solid rgba(238,243,230,.16);border-radius:12px;padding:.55rem .8rem;font-family:"Space Mono",monospace;color:var(--cream);font-size:.72rem;box-shadow:var(--shadow-sm);animation:floaty 6s ease-in-out infinite}
+  .about-chip b{color:var(--lime)}
+  .about-chip.a1{top:6%;right:2%}
+  .about-chip.a2{bottom:8%;left:-2%;animation-delay:1s}
+
+  .founders{margin-top:2rem;display:grid;gap:1rem}
+  .founder{display:flex;align-items:center;gap:1rem;background:rgba(238,243,230,.05);border:1px solid var(--line-dark);border-radius:var(--r);padding:1rem 1.2rem;transition:.35s}
+  .founder:hover{background:rgba(238,243,230,.08);transform:translateX(6px)}
+  .avatar{width:58px;height:58px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:"Fraunces",serif;font-weight:700;font-size:1.25rem;color:var(--ink);
+    background:conic-gradient(from 200deg,var(--lime),var(--leaf-bright),var(--harvest),var(--lime));position:relative}
+  .avatar::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#0e2a1c;z-index:0}
+  .avatar span{position:relative;z-index:1;color:var(--lime)}
+  .founder .fi h4{font-size:1.1rem;color:var(--cream)}
+  .founder .fi span{font-size:.8rem;color:var(--cream-dim);font-family:"Space Mono",monospace;letter-spacing:.05em}
+
+  /* ============ SERVICES ============ */
+  .services{padding-block:var(--sec)}
+  .svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.3rem}
+  .svc{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:2rem;position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s,border-color .4s;display:flex;gap:1.4rem;align-items:flex-start}
+  .svc:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(155,211,47,.5)}
+  .svc .ic{width:62px;height:62px;border-radius:18px;flex:none;display:grid;place-items:center;font-size:1.7rem;background:var(--canvas);box-shadow:inset 0 0 0 1px var(--line);transition:.4s}
+  .svc:hover .ic{transform:rotate(-8deg) scale(1.06)}
+  .svc.t1 .ic{background:rgba(70,176,108,.14)}
+  .svc.t2 .ic{background:rgba(52,189,214,.14)}
+  .svc.t3 .ic{background:rgba(155,211,47,.18)}
+  .svc.t4 .ic{background:rgba(239,122,44,.14)}
+  .svc h4{font-size:1.35rem;margin-bottom:.25rem}
+  .svc p.kick{font-family:"Space Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.8rem}
+  .svc .lnk{margin-top:.9rem;font-weight:600;font-size:.9rem;color:var(--leaf);display:inline-flex;gap:.45rem;align-items:center;transition:gap .3s}
+  .svc:hover .lnk{gap:.75rem;color:var(--harvest)}
+  .svc .num{position:absolute;right:1.3rem;top:1rem;font-family:"Fraunces",serif;font-size:2.4rem;color:var(--line);font-weight:700}
+
+  /* ============ IMPACT (stats) ============ */
+  .impact{padding-block:var(--sec);overflow:hidden}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;margin-top:1rem}
+  .stat{border:1px solid var(--line-dark);border-radius:var(--r);padding:1.8rem 1.5rem;background:rgba(238,243,230,.04);transition:.4s;position:relative;overflow:hidden}
+  .stat:hover{background:rgba(238,243,230,.07);transform:translateY(-5px)}
+  .stat .num{font-family:"Fraunces",serif;font-size:clamp(2.4rem,4.5vw,3.4rem);font-weight:700;color:var(--lime);line-height:1;display:flex;align-items:baseline}
+  .stat .num .aff{font-size:.55em;margin-left:.08em;color:var(--lime-deep)}
+  .stat p{margin-top:.7rem;color:var(--cream-dim);font-size:.92rem;max-width:24ch}
+  .stat .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--lime);transition:width 1.4s ease .2s}
+  .stat.in-view .bar{width:100%}
+
+  /* ============ SDG ============ */
+  .sdg{padding-block:var(--sec)}
+  .sdg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+  .sdg-card{border-radius:var(--r);padding:1.6rem;color:#fff;position:relative;overflow:hidden;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s}
+  .sdg-card:hover{transform:translateY(-7px) scale(1.015);box-shadow:0 28px 50px -24px rgba(0,0,0,.45)}
+  .sdg-card .n{font-family:"Fraunces",serif;font-size:2.4rem;font-weight:700;line-height:1}
+  .sdg-card h4{font-size:1.18rem;color:#fff}
+  .sdg-card p{font-size:.84rem;opacity:.9;margin-top:.3rem}
+  .sdg-card .glyph{position:absolute;right:-10px;bottom:-14px;font-size:4.4rem;opacity:.18}
+  .sdg2{background:linear-gradient(150deg,#e3b13e,#c98f1f)}
+  .sdg6{background:linear-gradient(150deg,#2fc4dd,#1b97b8)}
+  .sdg8{background:linear-gradient(150deg,#b51f49,#8a1637)}
+  .sdg13{background:linear-gradient(150deg,#469a5d,#2f7544)}
+
+  /* ============ CTA banner ============ */
+  .cta-sec{padding-block:clamp(2rem,5vw,4rem)}
+  .cta{border-radius:var(--r-lg);padding:clamp(2.4rem,5vw,3.6rem);position:relative;overflow:hidden;
+    background:linear-gradient(125deg,#0c2418 0%,#163d27 55%,#0c2418 100%);color:var(--cream);
+    display:grid;grid-template-columns:1.3fr auto;gap:2rem;align-items:center;box-shadow:var(--shadow)}
+  .cta h3{font-size:clamp(1.7rem,3.4vw,2.7rem)}
+  .cta .blob{position:absolute;border-radius:50%;filter:blur(50px)}
+  .cta .b1{width:280px;height:280px;background:rgba(155,211,47,.32);top:-90px;right:-40px;animation:floaty 8s ease-in-out infinite}
+  .cta .b2{width:220px;height:220px;background:rgba(239,122,44,.25);bottom:-90px;left:10%;animation:floaty 10s ease-in-out infinite reverse}
+  .cta .inner{position:relative;z-index:2}
+
+  /* ============ MISSION ============ */
+  .mission{padding-block:var(--sec)}
+  .m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:1rem}
+  .m-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.6rem;transition:.4s;position:relative;overflow:hidden}
+  .m-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-sm);border-color:rgba(155,211,47,.5)}
+  .m-card .mic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:1rem;background:rgba(70,176,108,.13);color:var(--leaf)}
+  .m-card .mic svg{width:24px;height:24px;fill:currentColor}
+  .m-card h4{font-size:1.12rem;margin-bottom:.45rem}
+  .m-card p{font-size:.9rem;color:var(--muted)}
+
+  /* ============ HOW IT WORKS ============ */
+  .how{padding-block:var(--sec)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-top:1.5rem;position:relative}
+  .steps::before{content:"";position:absolute;top:34px;left:8%;right:8%;height:2px;background:repeating-linear-gradient(90deg,rgba(191,242,74,.5) 0 10px,transparent 10px 20px);z-index:0}
+  .step{position:relative;z-index:2;text-align:center}
+  .step .node{width:68px;height:68px;border-radius:50%;margin:0 auto 1.2rem;display:grid;place-items:center;font-family:"Fraunces",serif;font-weight:700;font-size:1.4rem;color:var(--ink);
+    background:var(--lime);box-shadow:0 0 0 8px rgba(191,242,74,.12),0 14px 30px -14px rgba(191,242,74,.7);transition:.4s}
+  .step:hover .node{transform:translateY(-5px) scale(1.05)}
+  .step .si{font-size:1.6rem;margin-bottom:.6rem}
+  .step h4{font-size:1.12rem;color:var(--cream);margin-bottom:.4rem}
+  .step p{font-size:.86rem;color:var(--cream-dim);max-width:24ch;margin-inline:auto}
+
+  /* ============ TECH MARQUEE ============ */
+  .tech{padding-block:clamp(3rem,6vw,5rem);overflow:hidden}
+  .tech .wrap{text-align:center;margin-bottom:2rem}
+  .marquee{display:flex;gap:1rem;width:max-content;animation:slide 38s linear infinite}
+  .marquee.rev{animation-direction:reverse;animation-duration:46s;margin-top:1rem}
+  .mwrap{overflow:hidden;mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .mwrap:hover .marquee{animation-play-state:paused}
+  .pill{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1.3rem;border:1px solid var(--line);border-radius:50px;background:var(--card);font-weight:500;font-size:.92rem;white-space:nowrap;flex:none}
+  .pill i{width:9px;height:9px;border-radius:50%;background:var(--lime-deep);flex:none}
+  .pill:nth-child(3n) i{background:var(--harvest)}
+  .pill:nth-child(3n+1) i{background:var(--sky)}
+  @keyframes slide{to{transform:translateX(-50%)}}
+
+  /* ============ FOOTER ============ */
+  footer.site{background:var(--ink);color:var(--cream);padding-top:clamp(3.5rem,7vw,6rem);position:relative;overflow:hidden}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.5rem}
+  .foot-brand .brand{color:var(--cream);margin-bottom:1.1rem}
+  .foot-brand .brand span{color:var(--lime)}
+  .foot-brand p{color:var(--cream-dim);font-size:.92rem;max-width:38ch;margin-bottom:1.3rem}
+  footer h4{font-family:"Space Mono",monospace;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:1.2rem;font-weight:700}
+  footer .links li{margin-bottom:.7rem}
+  footer .links a{color:var(--cream-dim);font-size:.92rem;transition:.25s;display:inline-flex;align-items:center;gap:.4rem}
+  footer .links a:hover{color:var(--lime);transform:translateX(4px)}
+  .foot-contact li{display:flex;gap:.7rem;align-items:flex-start;color:var(--cream-dim);font-size:.92rem;margin-bottom:.9rem}
+  .foot-contact svg{width:17px;height:17px;fill:var(--lime);flex:none;margin-top:.2rem}
+  .foot-contact a:hover{color:var(--lime)}
+  .foot-bottom{border-top:1px solid var(--line-dark);margin-top:clamp(2.5rem,5vw,4rem);padding-block:1.6rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+  .foot-bottom p{font-size:.84rem;color:var(--cream-dim)}
+  .foot-bottom .heart{color:var(--harvest)}
+  footer .contour{opacity:.4}
+
+  /* scroll top */
+  .totop{position:fixed;right:1.4rem;bottom:1.4rem;width:48px;height:48px;border-radius:14px;background:var(--ink);color:var(--lime);display:grid;place-items:center;z-index:900;
+    opacity:0;visibility:hidden;transform:translateY(14px);transition:.35s;box-shadow:var(--shadow-sm)}
+  .totop.show{opacity:1;visibility:visible;transform:none}
+  .totop:hover{background:var(--lime);color:var(--ink);transform:translateY(-3px)}
+  .totop svg{width:20px;height:20px;fill:currentColor}
+
+  /* ============ REVEAL ============ */
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+  .reveal.in-view{opacity:1;transform:none}
+
+  /* ============ RESEARCH (GeoAgri-MS-VLM) ============ */
+  .muted{color:var(--muted)}
+  .research{padding-block:var(--sec);position:relative;overflow:hidden}
+  .research .blueprint{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.6;
+    background-image:linear-gradient(rgba(46,138,85,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(46,138,85,.09) 1px,transparent 1px);
+    background-size:42px 42px;
+    -webkit-mask-image:radial-gradient(125% 80% at 50% 0%,#000 38%,transparent 86%);
+    mask-image:radial-gradient(125% 80% at 50% 0%,#000 38%,transparent 86%)}
+  .research .wrap{position:relative;z-index:1}
+
+  .badges{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem}
+  .badge{font-family:"Space Mono",monospace;font-size:.7rem;letter-spacing:.03em;padding:.5rem .9rem;border-radius:50px;border:1px solid var(--line);background:var(--card);display:inline-flex;align-items:center;gap:.5rem;color:var(--ink)}
+  .badge .pdot{width:8px;height:8px;border-radius:50%;background:var(--lime-deep);flex:none}
+  .badge.live .pdot{animation:ping 1.9s infinite}
+
+  .rblock{margin-top:clamp(2.6rem,5vw,4rem)}
+  .prob{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.8rem,4vw,3.5rem);align-items:center;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(1.8rem,4vw,2.8rem)}
+  .prob h3{font-size:clamp(1.5rem,3vw,2.1rem);margin:.7rem 0 .8rem}
+  .prob .muted{font-size:.96rem}
+  .spectral{display:flex;gap:5px;align-items:flex-end;height:140px;margin-bottom:1.1rem}
+  .band{flex:1;border-radius:5px 5px 0 0;position:relative;transform-origin:bottom;animation:bandPulse 3s ease-in-out infinite;min-width:0}
+  .band span{position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);font-family:"Space Mono",monospace;font-size:.52rem;color:var(--muted);white-space:nowrap}
+  .band.rgb::after{content:"";position:absolute;inset:0;border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 2px rgba(12,36,24,.42)}
+  @keyframes bandPulse{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.9)}}
+  .spec-cap{margin-top:1.5rem;font-family:"Space Mono",monospace;font-size:.7rem;color:var(--muted);display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+  .rgb-key,.ms-key{width:12px;height:12px;border-radius:3px;display:inline-block;flex:none}
+  .rgb-key{background:#46b06c;box-shadow:inset 0 0 0 2px rgba(12,36,24,.42)}
+  .ms-key{background:linear-gradient(90deg,#2f6bd6,#e0483c,#8e2a70)}
+
+  .arch{margin-top:clamp(1.6rem,3vw,2.4rem);background:linear-gradient(150deg,#0b2017,#08130d);border-radius:var(--r-lg);
+    padding:clamp(1.8rem,4vw,3rem);color:var(--cream);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+  .arch .eyebrow{color:var(--lime)}.arch .eyebrow::before{background:var(--lime)}
+  .arch h3{font-size:clamp(1.5rem,3vw,2.1rem);color:var(--cream)}
+  .pipe{display:flex;align-items:stretch;flex-wrap:wrap;justify-content:center}
+  .node{flex:1 1 150px;max-width:235px;background:rgba(238,243,230,.05);border:1px solid var(--line-dark);border-radius:18px;padding:1.3rem 1rem;text-align:center;position:relative;transition:.35s}
+  .node:hover{background:rgba(238,243,230,.09);transform:translateY(-4px)}
+  .node .ntag{font-family:"Space Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);display:block;margin-bottom:.6rem}
+  .node .nicon{font-size:1.7rem;margin-bottom:.5rem}
+  .node h5{font-family:"Fraunces",serif;font-size:1.08rem;color:var(--cream);margin-bottom:.25rem;line-height:1.1}
+  .node p{font-size:.74rem;color:var(--cream-dim);margin:0}
+  .node .state{position:absolute;top:.6rem;right:.7rem;font-size:.82rem;cursor:help}
+  .flow{flex:0 0 36px;align-self:center;height:2px;margin:0 2px;position:relative;
+    background:repeating-linear-gradient(90deg,rgba(191,242,74,.7) 0 6px,transparent 6px 12px)}
+  .flow::after{content:"";position:absolute;top:-3px;left:0;width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:flowdot 2.4s linear infinite}
+  @keyframes flowdot{0%{left:-2px;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:calc(100% - 6px);opacity:0}}
+  .outs{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.8rem}
+  .out{font-family:"Space Mono",monospace;font-size:.78rem;padding:.55rem 1rem;border-radius:50px;background:rgba(191,242,74,.12);border:1px solid rgba(191,242,74,.32);color:var(--lime)}
+  .arch-note{margin-top:1.6rem;font-size:.82rem;color:var(--cream-dim);text-align:center}
+  .arch-note b{color:var(--cream)}
+
+  .cap-head{margin-top:clamp(2.6rem,5vw,4rem);margin-bottom:1.6rem}
+  .cap-head h3{font-size:clamp(1.5rem,3vw,2.1rem);margin-top:.5rem}
+  .cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+  .cap{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.8rem;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s,border-color .4s;position:relative;overflow:hidden}
+  .cap:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(155,211,47,.5)}
+  .cap .cic{width:56px;height:56px;border-radius:15px;display:grid;place-items:center;font-size:1.6rem;background:rgba(70,176,108,.13);margin-bottom:1rem;transition:.4s}
+  .cap:hover .cic{transform:rotate(-8deg) scale(1.06)}
+  .cap h4{font-size:1.2rem;margin-bottom:.45rem}
+  .cap p{font-size:.9rem;color:var(--muted)}
+
+  .bench{margin-top:1.6rem;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:clamp(1.8rem,4vw,2.6rem);display:grid;grid-template-columns:auto 1fr;gap:clamp(1.5rem,4vw,2.6rem);align-items:center;position:relative;overflow:hidden}
+  .bench::before{content:"";position:absolute;inset:0;opacity:.4;pointer-events:none;
+    background-image:linear-gradient(rgba(46,138,85,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(46,138,85,.08) 1px,transparent 1px);background-size:30px 30px}
+  .bench-glyph{position:relative;z-index:1;width:96px;height:96px;border-radius:24px;display:grid;place-items:center;font-size:2.6rem;
+    background:linear-gradient(150deg,#0b2017,#08130d);box-shadow:var(--shadow-sm)}
+  .bench-copy{position:relative;z-index:1}
+  .bench h3{font-family:"Fraunces",serif;font-size:clamp(1.6rem,3.4vw,2.4rem)}
+  .bench .muted{font-size:.95rem}
+  .regions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.1rem}
+  .region{font-family:"Space Mono",monospace;font-size:.74rem;padding:.5rem .9rem;border-radius:50px;background:rgba(70,176,108,.12);border:1px solid rgba(70,176,108,.32);color:var(--leaf)}
+
+  .rq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.6rem}
+  .rcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(1.6rem,3vw,2.2rem)}
+  .rlist{margin-top:1.1rem;display:grid;gap:1rem}
+  .rlist li{display:flex;gap:1rem;align-items:flex-start;font-size:.92rem;color:var(--muted)}
+  .rlist li b{color:var(--ink)}
+  .rn{font-family:"Fraunces",serif;font-weight:700;font-size:1rem;color:var(--ink);background:rgba(155,211,47,.22);border-radius:10px;min-width:40px;height:40px;display:grid;place-items:center;flex:none}
+  .hyp .rn{background:rgba(52,189,214,.16);color:var(--leaf)}
+
+  .bridge{margin-top:clamp(2rem,4vw,3rem);text-align:center;font-size:1rem;color:var(--muted);max-width:62ch;margin-inline:auto;
+    border-top:1px dashed var(--line);padding-top:1.6rem}
+  .bridge b{color:var(--ink)}
+
+  /* hero now-building pill */
+  .now-building{display:inline-flex;align-items:center;gap:.55rem;margin-top:1.4rem;
+    font-family:"Space Mono",monospace;font-size:.78rem;color:var(--ink);
+    background:var(--card);border:1px solid var(--line);border-radius:50px;padding:.55rem 1rem;transition:.3s}
+  .now-building b{color:var(--leaf)}
+  .now-building .nb-dot{width:8px;height:8px;border-radius:50%;background:var(--lime-deep);flex:none;animation:ping 1.8s infinite}
+  .now-building .arr{transition:transform .3s}
+  .now-building:hover{border-color:rgba(155,211,47,.6);box-shadow:var(--shadow-sm);transform:translateY(-2px)}
+  .now-building:hover .arr{transform:translateX(3px)}
+
+  @media (max-width:1024px){
+    .prob,.rq-grid{grid-template-columns:1fr}
+    .bench{grid-template-columns:1fr;text-align:center;justify-items:center}
+    .regions{justify-content:center}
+  }
+  @media (max-width:768px){
+    .cap-grid{grid-template-columns:1fr}
+    .pipe{flex-direction:column;gap:.8rem}
+    .flow{display:none}
+    .node{max-width:none;width:100%}
+  }
+  @media (max-width:480px){
+    .band span{display:none}
+    .spectral{height:108px}
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:1024px){
+    .hero .wrap,.about .wrap{grid-template-columns:1fr}
+    .scope{margin-top:1rem;order:-1}
+    .about-visual{order:-1}
+    .crop-grid,.stats,.sdg-grid{grid-template-columns:repeat(2,1fr)}
+    .steps{grid-template-columns:repeat(2,1fr);gap:2rem}
+    .steps::before{display:none}
+    .m-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:768px){
+    .topbar{display:none}
+    .menu{position:fixed;inset:var(--head-h) 0 auto 0;flex-direction:column;align-items:flex-start;gap:0;
+      background:var(--canvas);padding:1rem var(--pad) 1.6rem;box-shadow:0 22px 40px -24px rgba(12,36,24,.5);
+      transform:translateY(-120%);opacity:0;visibility:hidden;transition:.4s cubic-bezier(.2,.8,.2,1);border-bottom:1px solid var(--line)}
+    .menu.open{transform:none;opacity:1;visibility:visible}
+    .menu a{width:100%;padding:.9rem 0;border-bottom:1px solid var(--line);font-size:1.05rem}
+    .hamburger{display:flex}
+    header.nav{background:rgba(245,241,230,.92);backdrop-filter:blur(12px)}
+    .svc-grid{grid-template-columns:1fr}
+    .cta{grid-template-columns:1fr;text-align:center}
+    .cta .inner+div{display:flex;justify-content:center}
+    .foot-grid{grid-template-columns:1fr;gap:2rem}
+    .sec-head{grid-template-columns:1fr}
+    .sec-head .idx{writing-mode:horizontal-tb;grid-row:1}
+    .sec-head .hl{grid-column:1}
+  }
+  @media (max-width:480px){
+    .crop-grid,.stats,.sdg-grid,.m-grid,.steps{grid-template-columns:1fr 1fr}
+    .hero-meta{gap:1.2rem}
+    .chip.c1{left:0}.chip.c2{right:0}.chip.c3{left:0}
+  }
+  @media (max-width:400px){
+    .m-grid,.steps{grid-template-columns:1fr}
+    .hero-actions .btn{width:100%;justify-content:center}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal,.pre,.scope{opacity:1!important;transform:none!important}
+  }
+</style>
+</head>
+<body>
+<a href="#home" class="skip">Skip to content</a>
+
+<!-- grain overlay -->
+<svg class="grain" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+
+<!-- ===== TOPBAR ===== -->
+<div class="topbar">
+  <div class="wrap">
+    <ul>
+      <li><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3V5Zm2 2v.4l7 4.6 7-4.6V7H5Zm14 2.7-6.4 4.2a1 1 0 0 1-1.2 0L5 9.7V17h14V9.7Z"/></svg><b>Email&nbsp;</b><a href="mailto:info@techshoor.com">info@techshoor.com</a></li>
+      <li><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 16a7 7 0 1 1 0-14 7 7 0 0 1 0 14Zm.9-11h-1.8v5l4 2.4.9-1.5-3.1-1.9V8Z"/></svg><b>Hours&nbsp;</b>Mon–Fri, 08am–05pm</li>
+    </ul>
+    <ul>
+      <li><svg viewBox="0 0 24 24"><path d="M6.6 3 9 8l-2 1.5a12 12 0 0 0 5.5 5.5L14 13l5 2.4V19a2 2 0 0 1-2.2 2A16 16 0 0 1 3 7.2 2 2 0 0 1 5 5l1.6-2Z"/></svg><b>Call&nbsp;</b><a href="tel:+923120001547">+92 (312) 0001547</a></li>
+      <li>
+        <div class="socials">
+          <a href="https://www.facebook.com/techshoor/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M15.12 5.32H17V2.14A26.1 26.1 0 0 0 14.26 2c-2.72 0-4.58 1.66-4.58 4.7v2.6H6.6v3.56h3.08V22h3.7v-9.14h3.06l.46-3.56h-3.52V7.05c0-1.03.28-1.73 1.76-1.73Z"/></svg></a>
+          <a href="https://twitter.com/techshoor" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24"><path d="M17.5 3h3l-7.2 8.2L22 21h-6.6l-4.3-5.6L6 21H3l7.7-8.8L2.5 3h6.7l3.9 5.2L17.5 3Zm-1.1 16h1.8L7.6 4.9H5.7L16.4 19Z"/></svg></a>
+          <a href="https://www.youtube.com/@TechShoor" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M21.6 7.2s-.2-1.4-.8-2c-.7-.8-1.5-.8-1.9-.9C16.2 4 12 4 12 4s-4.2 0-6.9.3c-.4.1-1.2.1-1.9.9-.6.6-.8 2-.8 2S2 8.8 2 10.4v1.2C2 13.2 2.4 14.8 2.4 14.8s.2 1.4.8 2c.7.8 1.7.8 2.2.9C7 18 12 18 12 18s4.2 0 6.9-.3c.4-.1 1.2-.1 1.9-.9.6-.6.8-2 .8-2s.4-1.6.4-3.2v-1.2c0-1.6-.4-3.2-.4-3.2ZM10 14V9l5 2.5L10 14Z"/></svg></a>
+          <a href="https://www.instagram.com/techshoor/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 7.4A4.6 4.6 0 1 0 12 16.6 4.6 4.6 0 0 0 12 7.4Zm0 7.6A3 3 0 1 1 12 9a3 3 0 0 1 0 6Zm4.8-7.8a1.1 1.1 0 1 1-1.1-1.1 1.1 1.1 0 0 1 1.1 1.1ZM20 8.9a5.3 5.3 0 0 0-1.4-3.7A5.3 5.3 0 0 0 14.9 4c-1.5-.1-5.8-.1-7.3 0A5.3 5.3 0 0 0 4 5.2 5.3 5.3 0 0 0 2.6 8.9c-.1 1.5-.1 5.8 0 7.3A5.3 5.3 0 0 0 4 19.9a5.3 5.3 0 0 0 3.7 1.4c1.5.1 5.8.1 7.3 0a5.3 5.3 0 0 0 3.7-1.4 5.3 5.3 0 0 0 1.4-3.7c.1-1.5.1-5.8-.1-7.3Z"/></svg></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#home" aria-label="TechShoor Agri home">
+      <span class="mark"><svg viewBox="0 0 24 24"><path d="M5 19C5 11 11 5 19 5c0 8-6 14-14 14Zm2.2-2.2c4.6-.6 8-4 8.6-8.6-4.6.6-8 4-8.6 8.6Z"/></svg></span>
+      <span><b>TechShoor</b> <span>Agri</span></span>
+    </a>
+    <nav class="menu" id="menu">
+      <a href="#home" class="active">Home</a>
+      <a href="#research">Research</a>
+      <a href="#detect">Models</a>
+      <a href="#services">Focus Areas</a>
+      <a href="#impact">Impact</a>
+      <a href="https://techshoor.com/" target="_blank" rel="noopener">Blog</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn" href="https://portal.techshoor.com/" target="_blank" rel="noopener">Live Demos <span class="arr">→</span></a>
+      <button class="hamburger" id="ham" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="home">
+    <div class="contour" aria-hidden="true">
+      <svg viewBox="0 0 800 800" fill="none" stroke="rgba(46,138,85,.35)" stroke-width="1.4" style="top:-20%;left:-10%">
+        <path d="M-50 300 Q150 200 350 320 T800 280"/><path d="M-50 360 Q170 250 360 380 T820 330"/>
+        <path d="M-50 420 Q180 320 380 440 T820 400"/><path d="M-50 500 Q200 400 400 520 T830 470"/>
+        <path d="M-50 600 Q220 500 420 600 T840 560"/>
+      </svg>
+    </div>
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow pre d1">Applied research · Satellite imagery × Deep learning</span>
+        <h1 class="display pre d2">We research how AI <span class="ital accent">reads</span> the land.</h1>
+        <p class="tag pre d3">// From orbit to insight - openly.</p>
+        <p class="lead pre d4">TechShoor Agri is an applied research group working at the intersection of remote sensing, deep learning and agriculture. We build multi-spectral models, crop-disease detectors and open benchmarks that read the signals nature already sends - from orbit.</p>
+        <div class="hero-actions pre d5">
+          <a class="btn" href="#research">Explore the research <span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#detect">Browse the models</a>
+        </div>
+        <a class="now-building pre d6" href="#research"><span class="nb-dot"></span><b>Current focus</b> · GeoAgri-MS-VLM <span class="arr">→</span></a>
+        <div class="hero-meta pre d6">
+          <div class="m"><b>8</b><span>Disease models</span></div>
+          <div class="m"><b>13-band</b><span>Multi-spectral</span></div>
+          <div class="m"><b>Open</b><span>Benchmark &amp; data</span></div>
+        </div>
+      </div>
+
+      <!-- SCAN VISUAL -->
+      <div class="scope" id="scope">
+        <div class="spot" id="spot"></div>
+        <img class="scene" src="image.png" alt="Layered multi-spectral satellite analysis of farmland — imagery, land-cover and vegetation-stress planes captured from orbit." />
+        <div class="reticle" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="coord">31.5204°N 74.3587°E · Punjab</div>
+        <div class="chip c1"><span class="k">NDVI · Vigor</span><span class="v"><span class="dot green"></span>0.81 Healthy</span></div>
+        <div class="chip c2"><span class="k">Tomato · Zone 4</span><span class="v"><span class="dot orange"></span>Late Blight</span></div>
+        <div class="chip c3"><span class="k">Soil moisture</span><span class="v"><span class="dot blue"></span>Stress: Low</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DETECT / CROP MODELS ===== -->
+  <section class="detect" id="detect">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="idx">/ 02 - Disease models</div>
+        <div class="hl">
+          <span class="eyebrow">Research prototypes · disease detection</span>
+          <h2 class="sec-title">Disease-detection <span class="ital accent-lime">models</span> we've built.</h2>
+          <p class="lead">A core strand of our research: deep-learning classifiers that identify crop disease from a single leaf image. Eight crops, published as free, interactive prototypes you can try right now.</p>
+        </div>
+      </div>
+      <div class="crop-grid">
+        <a class="crop reveal" style="--d:.0s" href="https://portal.techshoor.com/strawberry" target="_blank" rel="noopener"><span class="scanbar"></span><div class="med"><span class="emoji">🍓</span></div><h4>Strawberry</h4><span class="go">Live demo →</span></a>
+        <a class="crop reveal" style="--d:.06s" href="https://portal.techshoor.com/mango" target="_blank" rel="noopener"><span class="scanbar"></span><div class="med"><span class="emoji">🥭</span></div><h4>Mango</h4><span class="go">Live demo →</span></a>
+        <a class="crop reveal" style="--d:.12s" href="https://portal.techshoor.com/potato" target="_blank" rel="noopener"><span class="scanbar"></span><div class="med"><span class="emoji">🥔</span></div><h4>Potato</h4><span class="go">Live demo →</span></a>
+        <a class="crop reveal" style="--d:.18s" href="https://portal.techshoor.com/apple" target="_blank" rel="noopener"><span class="scanbar"></span><div class="med"><span class="emoji">🍎</span></div><h4>Apple</h4><span class="go">Live demo →</span></a>
+        <a class="crop reveal" style="--d:.0s" href="https://portal.techshoor.com/cherry" target="_blank" rel="noopener"><span class="scanbar"></span><div class="med"><span class="emoji">🍒</span></div><h4>Cherry</h4><span class="go">Live demo →</span></a>
+        <a class="crop reveal" style="--d:.06s" href="https://portal.techshoor.com/corn" target="_blank" rel="noopener"><span class="scanbar"></span><div class="med"><span class="emoji">🌽</span></div><h4>Corn</h4><span class="go">Live demo →</span></a>
+        <a class="crop reveal" style="--d:.12s" href="https://portal.techshoor.com/grape" target="_blank" rel="noopener"><span class="scanbar"></span><div class="med"><span class="emoji">🍇</span></div><h4>Grape</h4><span class="go">Live demo →</span></a>
+        <a class="crop reveal" style="--d:.18s" href="https://portal.techshoor.com/tomato" target="_blank" rel="noopener"><span class="scanbar"></span><div class="med"><span class="emoji">🍅</span></div><h4>Tomato</h4><span class="go">Live demo →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="about dark" id="about">
+    <div class="contour" aria-hidden="true">
+      <svg viewBox="0 0 800 800" fill="none" stroke="rgba(191,242,74,.25)" stroke-width="1.3" style="top:-10%;right:-30%;left:auto">
+        <path d="M0 200 Q200 120 400 240 T800 200"/><path d="M0 280 Q200 200 400 320 T800 280"/>
+        <path d="M0 380 Q200 300 400 420 T800 380"/><path d="M0 500 Q200 420 400 540 T800 500"/>
+      </svg>
+    </div>
+    <div class="wrap">
+      <div class="about-visual reveal">
+        <div class="globe">
+          <div class="ring"></div><div class="ring2"></div>
+          <div class="globe-grid"></div>
+          <div class="pin p1"></div><div class="pin p2"></div>
+        </div>
+        <div class="about-chip a1">Sentinel-2 · <b>13 bands</b></div>
+        <div class="about-chip a2">Punjab · Sindh · <b>KP</b></div>
+      </div>
+      <div class="about-content reveal" style="--d:.12s">
+        <span class="eyebrow">Who we are</span>
+        <h2 class="sec-title" style="margin:1rem 0 1.1rem">An applied research group for <span class="ital accent-lime">geospatial agriculture</span>.</h2>
+        <p class="lead">TechShoor Agri sits at the intersection of remote sensing, deep learning and agriculture. We're not selling a product - we're researching one: building multi-spectral models, disease detectors and open benchmarks, and partnering with researchers and institutions to turn satellite data into agricultural insight for Pakistan and beyond.</p>
+        <div class="founders">
+          <div class="founder"><div class="avatar"><span>MA</span></div><div class="fi"><h4>Muhammad Azhar</h4><span>Working on TechShoor Agri</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RESEARCH : GeoAgri-MS-VLM ===== -->
+  <section class="research" id="research">
+    <div class="blueprint" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="idx">/ 01 - Flagship research</div>
+        <div class="hl">
+          <span class="eyebrow">Master's thesis · MS Artificial Intelligence, FAST-NUCES Karachi</span>
+          <h2 class="sec-title">GeoAgri-MS-VLM - teaching AI to <span class="ital accent-lime">read</span> a field, not just look at it.</h2>
+          <p class="lead"><b>A Multi-Spectral Vision-Language Model for Geospatial Agricultural Analysis.</b> One model that takes raw multi-band satellite imagery and answers questions about it in plain language - what's growing, whether it's stressed, and what to do next.</p>
+          <div class="badges">
+            <span class="badge live"><span class="pdot"></span>In active development</span>
+            <span class="badge"><span class="pdot"></span>MS Thesis · 2026</span>
+            <span class="badge"><span class="pdot"></span>Target venue: IEEE TGRS / Remote Sensing of Environment</span>
+            <span class="badge"><span class="pdot"></span>Runs on a single GPU (RTX 3090 / 4090)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- The problem: spectral blindness -->
+      <div class="rblock reveal">
+        <div class="prob">
+          <div class="prob-copy">
+            <span class="eyebrow">The problem</span>
+            <h3>Most vision models are <span class="accent">spectrally blind.</span></h3>
+            <p class="muted">A standard vision-language model sees only Red, Green and Blue - the same three channels as a phone camera. But the earliest fingerprints of drought, disease and nutrient deficiency hide in the bands the eye can't see: red-edge, near-infrared and short-wave infrared. GeoAgri-MS-VLM reads all <b>13 Sentinel-2 bands</b>, so it can flag trouble weeks before it surfaces in an ordinary photo.</p>
+          </div>
+          <div class="prob-vis">
+            <div class="spectral" id="spectral"></div>
+            <p class="spec-cap"><span class="rgb-key"></span>RGB model sees 3 bands &nbsp;·&nbsp; <span class="ms-key"></span>GeoAgri-MS-VLM reads 13</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- The architecture pipeline -->
+      <div class="arch reveal">
+        <span class="eyebrow">The architecture</span>
+        <h3 style="margin:.6rem 0 1.7rem">From spectral pixels to a spoken answer.</h3>
+        <div class="pipe">
+          <div class="node"><span class="ntag">Input</span><div class="nicon">🛰️</div><h5>Sentinel-2</h5><p>13-band GeoTIFF tile</p></div>
+          <div class="flow"></div>
+          <div class="node"><span class="state" title="Pretrained &amp; frozen">❄️</span><span class="ntag">MS Encoder</span><div class="nicon">🌐</div><h5>Prithvi-EO 2.0</h5><p>Geospatial foundation model</p></div>
+          <div class="flow"></div>
+          <div class="node"><span class="state" title="Trained from scratch">🔥</span><span class="ntag">Projector</span><div class="nicon">🔗</div><h5>MLP Projector</h5><p>Aligns vision → language</p></div>
+          <div class="flow"></div>
+          <div class="node"><span class="state" title="Adapted with QLoRA">🔥</span><span class="ntag">LLM · QLoRA</span><div class="nicon">🧠</div><h5>Qwen2.5-VL-7B</h5><p>Reasons &amp; answers</p></div>
+        </div>
+        <div class="outs">
+          <span class="out">→ Crop-type classification</span>
+          <span class="out">→ Stress &amp; disease detection</span>
+          <span class="out">→ Agricultural Q&amp;A (VQA)</span>
+        </div>
+        <p class="arch-note"><b>❄️ frozen</b> &nbsp;·&nbsp; <b>🔥 trained</b> &nbsp;-&nbsp; only the lightweight projector and QLoRA adapters are trained, so the whole system fits and trains on a single consumer GPU.</p>
+      </div>
+
+      <!-- Capabilities -->
+      <div class="cap-head reveal"><span class="eyebrow">What it can do</span><h3>Three jobs, one model.</h3></div>
+      <div class="cap-grid">
+        <div class="cap reveal" style="--d:0s"><div class="cic">🗺️</div><h4>Crop-Type Classification</h4><p>Identify what's growing in each field straight from multi-spectral imagery - no ground visit required.</p></div>
+        <div class="cap reveal" style="--d:.08s"><div class="cic">🍂</div><h4>Stress &amp; Disease Detection</h4><p>Surface drought, nutrient and disease signatures early - while there's still time to act on them.</p></div>
+        <div class="cap reveal" style="--d:.16s"><div class="cic">💬</div><h4>Agricultural VQA</h4><p>Ask a question about a field in plain English and get a grounded, evidence-based answer back.</p></div>
+      </div>
+
+      <!-- Benchmark -->
+      <div class="bench reveal">
+        <div class="bench-glyph"><span>🗺️</span></div>
+        <div class="bench-copy">
+          <span class="eyebrow">New open benchmark</span>
+          <h3 style="margin:.5rem 0 .6rem">PakAgri-GeoTIFF-VQA</h3>
+          <p class="muted">A purpose-built benchmark pairing GeoTIFF satellite tiles with agricultural question–answer pairs across real farming regions of Pakistan - created to evaluate multi-spectral reasoning where it matters most.</p>
+          <div class="regions"><span class="region">📍 Punjab</span><span class="region">📍 Sindh</span><span class="region">📍 Khyber Pakhtunkhwa</span></div>
+        </div>
+      </div>
+
+      <!-- Contributions + research questions -->
+      <div class="rq-grid">
+        <div class="rcard reveal" style="--d:0s">
+          <span class="eyebrow">Core contributions</span>
+          <ul class="rlist">
+            <li><span class="rn">01</span><div><b>A parameter-efficient adaptation recipe.</b> A LoRA / QLoRA method for adapting multi-spectral VLMs, validated through six systematic, pre-registered ablation studies.</div></li>
+            <li><span class="rn">02</span><div><b>The PakAgri-GeoTIFF-VQA benchmark.</b> A new, openly evaluable dataset for multi-spectral agricultural reasoning grounded in Pakistan's fields.</div></li>
+          </ul>
+        </div>
+        <div class="rcard reveal" style="--d:.1s">
+          <span class="eyebrow">Research questions</span>
+          <ul class="rlist hyp">
+            <li><span class="rn">H1</span><div>Does a <b>multi-spectral</b> VLM outperform an <b>RGB-only</b> VLM on agricultural tasks?</div></li>
+            <li><span class="rn">H2</span><div>How much does the <b>spectral-fusion strategy</b> change performance? (four strategies compared)</div></li>
+            <li><span class="rn">H3</span><div>Does accuracy vary by <b>crop type × growth stage</b> - and where does the model struggle?</div></li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="bridge reveal">🌱 <b>How it connects:</b> GeoAgri-MS-VLM is the research engine behind the next generation of TechShoor Agri - evolving today's one-model-per-crop detectors into a single system that understands the whole field, end to end.</p>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="idx">/ 03 - Research areas</div>
+        <div class="hl">
+          <span class="eyebrow">Beyond disease detection</span>
+          <h2 class="sec-title">What else we're <span class="ital accent">researching</span>.</h2>
+          <p class="lead">Active research directions where we're turning multi-spectral satellite data into agricultural insight - each backed by an early, interactive prototype.</p>
+        </div>
+      </div>
+      <div class="svc-grid">
+        <a class="svc t1 reveal" style="--d:0s" href="https://portal.techshoor.com/PlantHealth" target="_blank" rel="noopener">
+          <span class="num">01</span><div class="ic">🌱</div>
+          <div><p class="kick">Crop-health monitoring</p><h4>Plant Health Analysis</h4><p>Building a complete picture of crop vigor and condition across a whole field from imagery.</p><span class="lnk">View prototype →</span></div>
+        </a>
+        <a class="svc t2 reveal" style="--d:.08s" href="https://portal.techshoor.com/PlantStressReport" target="_blank" rel="noopener">
+          <span class="num">02</span><div class="ic">💧</div>
+          <div><p class="kick">Stress detection</p><h4>Water-Stress Detection</h4><p>Researching how to detect hydration stress early, zone by zone, before symptoms reach the leaf.</p><span class="lnk">View prototype →</span></div>
+        </a>
+        <a class="svc t3 reveal" style="--d:.16s" href="https://portal.techshoor.com/WaterReport" target="_blank" rel="noopener">
+          <span class="num">03</span><div class="ic">🚰</div>
+          <div><p class="kick">Irrigation intelligence</p><h4>Water-Use Mapping</h4><p>Studying where water actually goes - to make irrigation more efficient and cut waste.</p><span class="lnk">View prototype →</span></div>
+        </a>
+        <a class="svc t4 reveal" style="--d:.24s" href="https://portal.techshoor.com/FertilizerReport" target="_blank" rel="noopener">
+          <span class="num">04</span><div class="ic">🧪</div>
+          <div><p class="kick">Nutrient mapping</p><h4>Fertilizer &amp; Nutrient Mapping</h4><p>Pinpointing nutrient gaps across a field so every kilo of fertilizer earns its keep.</p><span class="lnk">View prototype →</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== IMPACT / STATS ===== -->
+  <section class="impact dark" id="impact">
+    <div class="contour" aria-hidden="true">
+      <svg viewBox="0 0 1000 500" fill="none" stroke="rgba(191,242,74,.18)" stroke-width="1.3" style="top:0;left:-10%">
+        <path d="M0 120 Q250 40 500 160 T1000 120"/><path d="M0 220 Q250 140 500 260 T1000 220"/>
+        <path d="M0 320 Q250 240 500 360 T1000 320"/><path d="M0 420 Q250 340 500 460 T1000 420"/>
+      </svg>
+    </div>
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="idx">/ 04 - Why it matters</div>
+        <div class="hl">
+          <span class="eyebrow">Why this research matters</span>
+          <h2 class="sec-title">The problem we're <span class="ital accent-lime">researching</span> against.</h2>
+          <p class="lead">The pressure on global food systems is real. Better, data-driven decisions in the field are part of the answer - and that's what our research is for.</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat reveal" style="--d:0s"><div class="num"><span class="count" data-to="828" data-dec="0">0</span><span class="aff">M</span></div><p>people face hunger worldwide</p><span class="bar"></span></div>
+        <div class="stat reveal" style="--d:.08s"><div class="num"><span class="count" data-to="25" data-dec="0">0</span><span class="aff">%</span></div><p>of global freshwater goes to agriculture</p><span class="bar"></span></div>
+        <div class="stat reveal" style="--d:.16s"><div class="num"><span class="count" data-to="1.3" data-dec="1">0</span><span class="aff">B&nbsp;t</span></div><p>of food is wasted every single year</p><span class="bar"></span></div>
+        <div class="stat reveal" style="--d:.24s"><div class="num"><span class="count" data-to="70" data-dec="0">0</span><span class="aff">%</span></div><p>of crop loss is preventable with early action</p><span class="bar"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SDGs ===== -->
+  <section class="sdg" id="sdg">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="idx">/ 05 - Purpose &amp; impact</div>
+        <div class="hl">
+          <span class="eyebrow">Aligned with global goals</span>
+          <h2 class="sec-title">Sustainable Development <span class="ital accent">Goals</span>.</h2>
+          <p class="lead">Our work maps directly onto four UN Sustainable Development Goals - food, water, livelihoods and climate.</p>
+        </div>
+      </div>
+      <div class="sdg-grid">
+        <div class="sdg-card sdg2 reveal" style="--d:0s"><div class="n">02</div><div><h4>Zero Hunger</h4><p>More resilient yields for food security.</p></div><span class="glyph">🌾</span></div>
+        <div class="sdg-card sdg6 reveal" style="--d:.08s"><div class="n">06</div><div><h4>Clean Water</h4><p>Smarter irrigation, far less waste.</p></div><span class="glyph">💧</span></div>
+        <div class="sdg-card sdg8 reveal" style="--d:.16s"><div class="n">08</div><div><h4>Decent Work &amp; Growth</h4><p>Higher returns for farming communities.</p></div><span class="glyph">📈</span></div>
+        <div class="sdg-card sdg13 reveal" style="--d:.24s"><div class="n">13</div><div><h4>Climate Action</h4><p>Efficient, lower-impact agriculture.</p></div><span class="glyph">🌍</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-sec">
+    <div class="wrap">
+      <div class="cta reveal">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <div class="inner">
+          <span class="eyebrow">Researcher, student or partner?</span>
+          <h3 style="margin-top:.8rem">Let's collaborate on geospatial agriculture.</h3>
+        </div>
+        <div style="position:relative;z-index:2;display:flex;gap:.8rem;flex-wrap:wrap"><a class="btn" href="#contact">Get in touch <span class="arr">→</span></a><a class="btn btn-ghost" href="https://portal.techshoor.com/" target="_blank" rel="noopener">Live demos</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MISSION ===== -->
+  <section class="mission" id="mission">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="idx">/ 06 - Mission</div>
+        <div class="hl">
+          <span class="eyebrow">Why we do this research</span>
+          <h2 class="sec-title">Our research <span class="ital accent-lime">mission</span>.</h2>
+          <p class="lead">Read the signals nature already provides - rigorously, openly and cost-effectively - and turn them into knowledge farmers and researchers can use.</p>
+        </div>
+      </div>
+      <div class="m-grid">
+        <div class="m-card reveal" style="--d:0s"><div class="mic"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6l-8-4Zm-1.2 13.4-3.2-3.2 1.4-1.4 1.8 1.8 4-4 1.4 1.4-5.4 5.4Z"/></svg></div><h4>Better quality</h4><p>Accurate, timely information about the health and condition of every crop.</p></div>
+        <div class="m-card reveal" style="--d:.06s"><div class="mic"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10H4Zm6 0V4h4v16h-4Zm6 0v-7h4v7h-4Z"/></svg></div><h4>More quantity</h4><p>Optimized irrigation, fertilization and pest control for higher output.</p></div>
+        <div class="m-card reveal" style="--d:.12s"><div class="mic"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm-1-13h2v6l5 3-1 1.7-6-3.7V7Z"/></svg></div><h4>Real-time signals</h4><p>Satellite imagery and deep learning analyze crop conditions as they change.</p></div>
+        <div class="m-card reveal" style="--d:0s"><div class="mic"><svg viewBox="0 0 24 24"><path d="M3 13a9 9 0 0 1 18 0v7h-4v-7a5 5 0 0 0-10 0v7H3v-7Z"/></svg></div><h4>Sustainability</h4><p>Help farmers raise yields while making food production more sustainable.</p></div>
+        <div class="m-card reveal" style="--d:.06s"><div class="mic"><svg viewBox="0 0 24 24"><path d="M3 17h4v4H3v-4Zm7-6h4v10h-4V11Zm7-7h4v17h-4V4Z"/></svg></div><h4>Predictability</h4><p>Deep learning surfaces patterns and trends for far more reliable forecasts.</p></div>
+        <div class="m-card reveal" style="--d:.12s"><div class="mic"><svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Zm0 7.2L4.8 6 12 2.8 19.2 6 12 9.2ZM2 17l10 5 10-5v-5l-10 5L2 12v5Z"/></svg></div><h4>Self-sustenance</h4><p>The tools and knowledge farmers need to become more independent.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="how dark" id="how">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="idx">/ 07 - Research pipeline</div>
+        <div class="hl">
+          <span class="eyebrow">How our research works</span>
+          <h2 class="sec-title">From raw orbit data to a <span class="ital accent-lime">tested</span> model.</h2>
+          <p class="lead">Four stages take us from raw multi-spectral imagery to rigorously evaluated, reproducible models.</p>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step reveal" style="--d:0s"><div class="node">1</div><div class="si">🛰️</div><h4>Data Acquisition</h4><p>Gather multi-band Sentinel-2 imagery over real agricultural regions.</p></div>
+        <div class="step reveal" style="--d:.1s"><div class="node">2</div><div class="si">🗂️</div><h4>Spectral Processing</h4><p>Turn raw GeoTIFFs into clean, model-ready multi-spectral tiles.</p></div>
+        <div class="step reveal" style="--d:.2s"><div class="node">3</div><div class="si">🧠</div><h4>Model Development</h4><p>Train and adapt deep-learning and vision-language architectures.</p></div>
+        <div class="step reveal" style="--d:.3s"><div class="node">4</div><div class="si">📊</div><h4>Evaluation</h4><p>Benchmark rigorously against held-out data and open datasets.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TECH MARQUEE ===== -->
+  <section class="tech">
+    <div class="wrap reveal">
+      <span class="eyebrow" style="justify-content:center">Our research stack</span>
+      <h2 class="sec-title" style="margin-top:.8rem">The tools behind the <span class="ital accent">research</span>.</h2>
+    </div>
+    <div class="mwrap">
+      <div class="marquee" id="m1"></div>
+    </div>
+    <div class="mwrap">
+      <div class="marquee rev" id="m2"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site" id="contact">
+  <div class="contour" aria-hidden="true">
+    <svg viewBox="0 0 1000 400" fill="none" stroke="rgba(191,242,74,.16)" stroke-width="1.2" style="bottom:-20%;top:auto;left:-5%">
+      <path d="M0 120 Q250 40 500 160 T1000 120"/><path d="M0 220 Q250 140 500 260 T1000 220"/><path d="M0 320 Q250 240 500 360 T1000 320"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#home"><span class="mark"><svg viewBox="0 0 24 24"><path d="M5 19C5 11 11 5 19 5c0 8-6 14-14 14Zm2.2-2.2c4.6-.6 8-4 8.6-8.6-4.6.6-8 4-8.6 8.6Z"/></svg></span><span><b>TechShoor</b> <span>Agri</span></span></a>
+        <p>An applied research group using satellite imagery and deep learning to study crop disease, plant stress and the future of geospatial agriculture.</p>
+        <div class="socials">
+          <a href="https://www.facebook.com/techshoor/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M15.12 5.32H17V2.14A26.1 26.1 0 0 0 14.26 2c-2.72 0-4.58 1.66-4.58 4.7v2.6H6.6v3.56h3.08V22h3.7v-9.14h3.06l.46-3.56h-3.52V7.05c0-1.03.28-1.73 1.76-1.73Z"/></svg></a>
+          <a href="https://twitter.com/techshoor" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24"><path d="M17.5 3h3l-7.2 8.2L22 21h-6.6l-4.3-5.6L6 21H3l7.7-8.8L2.5 3h6.7l3.9 5.2L17.5 3Zm-1.1 16h1.8L7.6 4.9H5.7L16.4 19Z"/></svg></a>
+          <a href="https://www.linkedin.com/company/techshoor/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M6.94 5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0ZM3.4 8.5h3.1V21H3.4V8.5Zm5.05 0h2.97v1.7h.04a3.26 3.26 0 0 1 2.93-1.6c3.13 0 3.71 2.06 3.71 4.74V21h-3.1v-5.55c0-1.32-.02-3.02-1.84-3.02-1.84 0-2.12 1.44-2.12 2.93V21h-3.1V8.5Z"/></svg></a>
+          <a href="https://www.youtube.com/@TechShoor" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M21.6 7.2s-.2-1.4-.8-2c-.7-.8-1.5-.8-1.9-.9C16.2 4 12 4 12 4s-4.2 0-6.9.3c-.4.1-1.2.1-1.9.9-.6.6-.8 2-.8 2S2 8.8 2 10.4v1.2C2 13.2 2.4 14.8 2.4 14.8s.2 1.4.8 2c.7.8 1.7.8 2.2.9C7 18 12 18 12 18s4.2 0 6.9-.3c.4-.1 1.2-.1 1.9-.9.6-.6.8-2 .8-2s.4-1.6.4-3.2v-1.2c0-1.6-.4-3.2-.4-3.2ZM10 14V9l5 2.5L10 14Z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-links">
+        <h4>Quick Links</h4>
+        <ul class="links">
+          <li><a href="#home">→ Home</a></li>
+          <li><a href="#research">→ Research</a></li>
+          <li><a href="#detect">→ Models</a></li>
+          <li><a href="#services">→ Research Areas</a></li>
+          <li><a href="#about">→ About</a></li>
+          <li><a href="https://techshoor.com/" target="_blank" rel="noopener">→ Blog</a></li>
+          <li><a href="https://portal.techshoor.com/" target="_blank" rel="noopener">→ Live Demos</a></li>
+        </ul>
+      </div>
+      <div class="foot-contact-w">
+        <h4>Contact Us</h4>
+        <ul class="foot-contact">
+          <li><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg><span>Karachi, Pakistan</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M6.6 3 9 8l-2 1.5a12 12 0 0 0 5.5 5.5L14 13l5 2.4V19a2 2 0 0 1-2.2 2A16 16 0 0 1 3 7.2 2 2 0 0 1 5 5l1.6-2Z"/></svg><a href="tel:+923120001547">+92 (312) 0001547</a></li>
+          <li><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3V5Zm2 2v.4l7 4.6 7-4.6V7H5Zm14 2.7-6.4 4.2a1 1 0 0 1-1.2 0L5 9.7V17h14V9.7Z"/></svg><a href="mailto:azharthegeek@gmail.com">azharthegeek@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p>Copyright © <span id="year">2025</span> TechShoor Agri. All Rights Reserved.</p>
+      <p>Open research, built with <span class="heart">♥</span> for Pakistan's farmers.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="totop" id="totop" aria-label="Back to top"><svg viewBox="0 0 24 24"><path d="M12 8l-6 6 1.4 1.4L12 10.8l4.6 4.6L18 14z"/></svg></button>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* year */
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* mobile nav */
+  var ham = document.getElementById("ham"), menu = document.getElementById("menu");
+  ham.addEventListener("click", function(){
+    var open = menu.classList.toggle("open");
+    ham.classList.toggle("open", open);
+    ham.setAttribute("aria-expanded", open);
+  });
+  menu.querySelectorAll("a").forEach(function(a){
+    a.addEventListener("click", function(){ menu.classList.remove("open"); ham.classList.remove("open"); ham.setAttribute("aria-expanded","false"); });
+  });
+
+  /* sticky header + totop */
+  var nav = document.getElementById("nav"), totop = document.getElementById("totop");
+  function onScroll(){
+    var y = window.scrollY;
+    nav.classList.toggle("scrolled", y > 12);
+    totop.classList.toggle("show", y > 600);
+  }
+  window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+  totop.addEventListener("click", function(){ window.scrollTo({top:0, behavior: reduce ? "auto" : "smooth"}); });
+
+  /* reveal + stat count-up */
+  var counted = false;
+  function animateCount(el){
+    var to = parseFloat(el.getAttribute("data-to")),
+        dec = parseInt(el.getAttribute("data-dec")||"0",10),
+        dur = 1500, start = null;
+    if(reduce){ el.textContent = to.toFixed(dec); return; }
+    function step(t){
+      if(!start) start = t;
+      var p = Math.min((t-start)/dur, 1),
+          e = 1 - Math.pow(1-p, 3);
+      el.textContent = (to*e).toFixed(dec);
+      if(p<1) requestAnimationFrame(step); else el.textContent = to.toFixed(dec);
+    }
+    requestAnimationFrame(step);
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add("in-view");
+        if(en.target.classList.contains("stat")){
+          en.target.querySelectorAll(".count").forEach(animateCount);
+        }
+        io.unobserve(en.target);
+      }
+    });
+  }, {threshold:0.16, rootMargin:"0px 0px -8% 0px"});
+  document.querySelectorAll(".reveal, .stat").forEach(function(el){ io.observe(el); });
+
+  /* scrollspy */
+  var links = Array.prototype.slice.call(menu.querySelectorAll('a[href^="#"]'));
+  var spy = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        var id = en.target.id;
+        links.forEach(function(l){ l.classList.toggle("active", l.getAttribute("href")==="#"+id); });
+      }
+    });
+  }, {rootMargin:"-45% 0px -50% 0px"});
+  ["home","detect","research","services","impact"].forEach(function(id){
+    var s = document.getElementById(id); if(s) spy.observe(s);
+  });
+
+  /* hero spotlight */
+  var scope = document.getElementById("scope"), spot = document.getElementById("spot");
+  if(scope && spot && !reduce && window.matchMedia("(hover:hover)").matches){
+    scope.addEventListener("mousemove", function(e){
+      var r = scope.getBoundingClientRect();
+      spot.style.left = (e.clientX - r.left) + "px";
+      spot.style.top = (e.clientY - r.top) + "px";
+      spot.style.opacity = "1";
+    });
+    scope.addEventListener("mouseleave", function(){ spot.style.opacity = "0"; });
+  }
+
+  /* tech marquee */
+  var tech = ["PyTorch","Hugging Face","Transformers","PEFT","bitsandbytes · QLoRA","TorchGeo","rasterio","rioxarray","GDAL","STAC API","Hydra","Weights & Biases","scikit-learn","NumPy","Matplotlib","DVC","Sentinel-2","Prithvi-EO 2.0","Qwen2.5-VL","Python"];
+  function fill(elId, list){
+    var el = document.getElementById(elId);
+    var html = "";
+    // duplicate the list for a seamless -50% loop
+    for(var k=0;k<2;k++){
+      list.forEach(function(t){ html += '<span class="pill"><i></i>'+t+'</span>'; });
+    }
+    el.innerHTML = html;
+  }
+  fill("m1", tech);
+  fill("m2", tech.slice().reverse());
+
+  /* spectral band chart (13 Sentinel-2 bands) */
+  var bands = [
+    {l:"B1",c:"#6d5bd0",h:40},{l:"B2",c:"#2f6bd6",h:62,rgb:1},{l:"B3",c:"#46b06c",h:72,rgb:1},
+    {l:"B4",c:"#e0483c",h:66,rgb:1},{l:"B5",c:"#f2873c",h:82},{l:"B6",c:"#f56a2c",h:90},
+    {l:"B7",c:"#ee5a3a",h:94},{l:"B8",c:"#d63f5a",h:100},{l:"B8A",c:"#c4365f",h:96},
+    {l:"B9",c:"#a83069",h:58},{l:"B10",c:"#8e2a70",h:46},{l:"B11",c:"#6f2470",h:80},{l:"B12",c:"#531e63",h:72}
+  ];
+  var sp = document.getElementById("spectral");
+  if(sp){
+    sp.innerHTML = bands.map(function(b,i){
+      return '<div class="band'+(b.rgb?' rgb':'')+'" style="height:'+b.h+'%;background:'+b.c+';animation-delay:'+(i*0.12).toFixed(2)+'s"><span>'+b.l+'</span></div>';
+    }).join("");
+  }
+})();
+</script>
+</body>
+</html>
