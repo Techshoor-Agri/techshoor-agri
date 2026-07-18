@@ -13,12 +13,61 @@
 <meta property="og:title" content="TechShoor Agri - Applied Research in Satellite Imagery &amp; Agricultural AI" />
 <meta property="og:description" content="An applied research group studying multi-spectral vision-language models, crop-disease detection and open geospatial benchmarks for agriculture." />
 <meta property="og:url" content="https://techshoor.com/" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:image" content="https://techshoor.com/image.png" />
+<meta property="og:image:width" content="1472" />
+<meta property="og:image:height" content="840" />
+<meta property="og:image:alt" content="Layered multi-spectral satellite analysis of farmland captured from orbit" />
+<link rel="canonical" href="https://techshoor.com/" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="TechShoor Agri - Applied Research in Satellite Imagery &amp; Agricultural AI" />
 <meta name="twitter:description" content="Researching how AI reads the land: multi-spectral models, crop-disease detection and open geospatial benchmarks." />
+<meta name="twitter:image" content="https://techshoor.com/image.png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ResearchOrganization",
+      "@id": "https://techshoor.com/#org",
+      "name": "TechShoor Agri",
+      "url": "https://techshoor.com/",
+      "description": "An applied research group studying satellite imagery and deep learning for agriculture: multi-spectral vision-language models, crop-disease detection, plant-stress monitoring and open geospatial benchmarks.",
+      "email": "azharthegeek@gmail.com",
+      "telephone": "+92-312-0001547",
+      "address": { "@type": "PostalAddress", "addressLocality": "Karachi", "addressCountry": "PK" },
+      "sameAs": [
+        "https://www.facebook.com/techshoor/",
+        "https://twitter.com/techshoor",
+        "https://www.youtube.com/@TechShoor",
+        "https://www.instagram.com/techshoor/",
+        "https://www.linkedin.com/company/techshoor/"
+      ],
+      "founder": { "@type": "Person", "name": "Muhammad Azhar" },
+      "knowsAbout": ["Remote sensing", "Multi-spectral imaging", "Vision-language models", "Crop disease detection", "Precision agriculture", "Sentinel-2", "Geospatial deep learning"]
+    },
+    {
+      "@type": "ResearchProject",
+      "name": "GeoAgri-MS-VLM",
+      "description": "A multi-spectral vision-language model for geospatial agricultural analysis: crop-type classification, stress and disease detection, and agricultural visual question answering from 13-band Sentinel-2 imagery.",
+      "url": "https://techshoor.com/#research",
+      "funder": { "@id": "https://techshoor.com/#org" },
+      "member": { "@type": "Person", "name": "Muhammad Azhar" }
+    },
+    {
+      "@type": "Dataset",
+      "name": "PakAgri-GeoTIFF-VQA",
+      "description": "An open benchmark pairing GeoTIFF satellite tiles with agricultural question-answer pairs across farming regions of Pakistan (Punjab, Sindh, Khyber Pakhtunkhwa), built to evaluate multi-spectral agricultural reasoning.",
+      "url": "https://techshoor.com/#research",
+      "creator": { "@id": "https://techshoor.com/#org" },
+      "spatialCoverage": "Pakistan"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,600&family=Sora:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="preload" as="image" href="image.png" fetchpriority="high" />
 <style>
   /* ============ TOKENS ============ */
   :root{
@@ -67,6 +116,9 @@
   button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
   section{position:relative}
   ::selection{background:var(--lime);color:var(--ink)}
+  :focus-visible{outline:2.5px solid var(--lime-deep);outline-offset:3px;border-radius:4px}
+  .dark :focus-visible,.arch :focus-visible,footer.site :focus-visible{outline-color:var(--lime)}
+  .btn:focus-visible{outline-offset:4px}
   .skip{position:fixed;left:1rem;top:-70px;z-index:10000;background:var(--ink);color:var(--lime);padding:.7rem 1.1rem;border-radius:10px;font-weight:600;font-size:.9rem;transition:top .25s}
   .skip:focus{top:1rem;outline:2px solid var(--lime);outline-offset:2px}
 
@@ -585,7 +637,7 @@
       <a href="#home" class="active">Home</a>
       <a href="#research">Research</a>
       <a href="#detect">Models</a>
-      <a href="#services">Focus Areas</a>
+      <a href="#services">Research Areas</a>
       <a href="#impact">Impact</a>
       <a href="https://techshoor.com/" target="_blank" rel="noopener">Blog</a>
       <a href="#contact">Contact</a>
@@ -628,7 +680,7 @@
       <!-- SCAN VISUAL -->
       <div class="scope" id="scope">
         <div class="spot" id="spot"></div>
-        <img class="scene" src="image.png" alt="Layered multi-spectral satellite analysis of farmland — imagery, land-cover and vegetation-stress planes captured from orbit." />
+        <img class="scene" src="image.png" width="1472" height="840" fetchpriority="high" decoding="async" alt="Layered multi-spectral satellite analysis of farmland — imagery, land-cover and vegetation-stress planes captured from orbit." />
         <div class="reticle" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
         <div class="coord">31.5204°N 74.3587°E · Punjab</div>
         <div class="chip c1"><span class="k">NDVI · Vigor</span><span class="v"><span class="dot green"></span>0.81 Healthy</span></div>
@@ -642,7 +694,7 @@
   <section class="detect" id="detect">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="idx">/ 02 - Disease models</div>
+        <div class="idx">/ 01 - Disease models</div>
         <div class="hl">
           <span class="eyebrow">Research prototypes · disease detection</span>
           <h2 class="sec-title">Disease-detection <span class="ital accent-lime">models</span> we've built.</h2>
@@ -685,7 +737,7 @@
         <h2 class="sec-title" style="margin:1rem 0 1.1rem">An applied research group for <span class="ital accent-lime">geospatial agriculture</span>.</h2>
         <p class="lead">TechShoor Agri sits at the intersection of remote sensing, deep learning and agriculture. We're not selling a product - we're researching one: building multi-spectral models, disease detectors and open benchmarks, and partnering with researchers and institutions to turn satellite data into agricultural insight for Pakistan and beyond.</p>
         <div class="founders">
-          <div class="founder"><div class="avatar"><span>MA</span></div><div class="fi"><h4>Muhammad Azhar</h4><span>Working on TechShoor Agri</span></div></div>
+          <div class="founder"><div class="avatar"><span>MA</span></div><div class="fi"><h4>Muhammad Azhar</h4><span>Founder · MS AI, FAST-NUCES Karachi</span></div></div>
         </div>
       </div>
     </div>
@@ -696,7 +748,7 @@
     <div class="blueprint" aria-hidden="true"></div>
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="idx">/ 01 - Flagship research</div>
+        <div class="idx">/ 02 - Flagship research</div>
         <div class="hl">
           <span class="eyebrow">Master's thesis · MS Artificial Intelligence, FAST-NUCES Karachi</span>
           <h2 class="sec-title">GeoAgri-MS-VLM - teaching AI to <span class="ital accent-lime">read</span> a field, not just look at it.</h2>
@@ -838,10 +890,11 @@
         </div>
       </div>
       <div class="stats">
-        <div class="stat reveal" style="--d:0s"><div class="num"><span class="count" data-to="828" data-dec="0">0</span><span class="aff">M</span></div><p>people face hunger worldwide</p><span class="bar"></span></div>
-        <div class="stat reveal" style="--d:.08s"><div class="num"><span class="count" data-to="25" data-dec="0">0</span><span class="aff">%</span></div><p>of global freshwater goes to agriculture</p><span class="bar"></span></div>
-        <div class="stat reveal" style="--d:.16s"><div class="num"><span class="count" data-to="1.3" data-dec="1">0</span><span class="aff">B&nbsp;t</span></div><p>of food is wasted every single year</p><span class="bar"></span></div>
-        <div class="stat reveal" style="--d:.24s"><div class="num"><span class="count" data-to="70" data-dec="0">0</span><span class="aff">%</span></div><p>of crop loss is preventable with early action</p><span class="bar"></span></div>
+        <!-- Sources: FAO SOFI 2024 (~733M undernourished, 2023); FAO AQUASTAT (~70% of freshwater withdrawals); FAO (up to 40% of crop production lost to pests & diseases yearly); UNEP Food Waste Index 2024 (~1.05B t wasted, 2022) -->
+        <div class="stat reveal" style="--d:0s"><div class="num"><span class="count" data-to="733" data-dec="0">0</span><span class="aff">M</span></div><p>people face hunger worldwide</p><span class="bar"></span></div>
+        <div class="stat reveal" style="--d:.08s"><div class="num"><span class="count" data-to="70" data-dec="0">0</span><span class="aff">%</span></div><p>of global freshwater withdrawals go to agriculture</p><span class="bar"></span></div>
+        <div class="stat reveal" style="--d:.16s"><div class="num"><span class="count" data-to="40" data-dec="0">0</span><span class="aff">%</span></div><p>of crop production is lost to pests &amp; diseases each year</p><span class="bar"></span></div>
+        <div class="stat reveal" style="--d:.24s"><div class="num"><span class="count" data-to="1" data-dec="0">0</span><span class="aff">B&nbsp;t</span></div><p>of food is wasted every single year</p><span class="bar"></span></div>
       </div>
     </div>
   </section>
@@ -978,7 +1031,7 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <p>Copyright © <span id="year">2025</span> TechShoor Agri. All Rights Reserved.</p>
+      <p>Copyright © <span id="year">2026</span> TechShoor Agri. All Rights Reserved.</p>
       <p>Open research, built with <span class="heart">♥</span> for Pakistan's farmers.</p>
     </div>
   </div>
@@ -1001,8 +1054,13 @@
     ham.classList.toggle("open", open);
     ham.setAttribute("aria-expanded", open);
   });
-  menu.querySelectorAll("a").forEach(function(a){
-    a.addEventListener("click", function(){ menu.classList.remove("open"); ham.classList.remove("open"); ham.setAttribute("aria-expanded","false"); });
+  function closeMenu(){ menu.classList.remove("open"); ham.classList.remove("open"); ham.setAttribute("aria-expanded","false"); }
+  menu.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", closeMenu); });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && menu.classList.contains("open")){ closeMenu(); ham.focus(); }
+  });
+  document.addEventListener("click", function(e){
+    if(menu.classList.contains("open") && !menu.contains(e.target) && !ham.contains(e.target)) closeMenu();
   });
 
   /* sticky header + totop */
@@ -1054,7 +1112,7 @@
       }
     });
   }, {rootMargin:"-45% 0px -50% 0px"});
-  ["home","detect","research","services","impact"].forEach(function(id){
+  ["home","detect","about","research","services","impact","sdg","mission","how"].forEach(function(id){
     var s = document.getElementById(id); if(s) spy.observe(s);
   });
 
