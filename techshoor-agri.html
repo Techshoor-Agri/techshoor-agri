@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>document.documentElement.className+=" js";</script>
 <title>TechShoor Agri - Applied Research in Satellite Imagery &amp; Agricultural AI</title>
 <meta name="description" content="TechShoor Agri is an applied research group studying satellite imagery and deep learning for agriculture - multi-spectral vision-language models, crop-disease detection, plant-stress monitoring and open geospatial benchmarks." />
 <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBjMjQxOCIvPjxwYXRoIGQ9Ik03IDI1QzcgMTQgMTQgNyAyNSA3YzAgMTEtNyAxOC0xOCAxOFoiIGZpbGw9IiNiZmYyNGEiLz48cGF0aCBkPSJNOS42IDIyLjRjNC0uNyA3LjMtNCA4LTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzBjMjQxOCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==" />
@@ -96,6 +97,11 @@
     --pad:clamp(1.2rem,4vw,2.6rem);
     --sec:clamp(4.5rem,9vw,8rem);
     --head-h:74px;
+    /* motion */
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-io:cubic-bezier(.65,0,.35,1);
+    --dur-1:.5s;
+    --dur-2:.85s;
   }
 
   /* ============ RESET ============ */
@@ -221,26 +227,50 @@
   .hero-meta .m span{font-size:.8rem;color:var(--muted);font-family:"Space Mono",monospace;text-transform:uppercase;letter-spacing:.1em}
   .hero-meta .m{border-left:2px solid var(--lime-deep);padding-left:.9rem}
 
-  /* hero load anim */
-  .pre{opacity:0;transform:translateY(26px);animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards}
+  /* hero load anim - gated on .js so a no-JS visitor never sees hidden content */
+  .js .pre{opacity:0;transform:translateY(26px);animation:rise .9s var(--ease-out) forwards;animation-play-state:paused}
+  .js body.ready .pre{animation-play-state:running}
   .pre.d1{animation-delay:.05s}.pre.d2{animation-delay:.18s}.pre.d3{animation-delay:.31s}
   .pre.d4{animation-delay:.44s}.pre.d5{animation-delay:.57s}.pre.d6{animation-delay:.7s}
   @keyframes rise{to{opacity:1;transform:none}}
 
   /* ---- HERO SCAN VISUAL ---- */
-  .scope{position:relative;width:100%;max-width:560px;margin-inline:auto;
-    opacity:0;transform:translateY(30px) scale(.97);animation:rise 1s cubic-bezier(.2,.8,.2,1) .5s forwards}
-  .scene{display:block;width:100%;height:auto;position:relative;z-index:2;
+  .scope{position:relative;width:100%;max-width:560px;margin-inline:auto}
+  .js .scope{opacity:0;transform:translateY(30px) scale(.97);animation:rise 1s var(--ease-out) .35s forwards;animation-play-state:paused}
+  .js body.ready .scope{animation-play-state:running}
+  /* 3D stage: one JS-driven transform, layers separate themselves with --z */
+  .scope-3d{position:relative;transform-style:preserve-3d;
+    transform:perspective(1200px) translateY(var(--sy,0px)) rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg));
+    transition:transform .7s var(--ease-out)}
+  .scope-3d.live{transition:none}
+  .scene-wrap{position:relative;z-index:2;transform-style:preserve-3d}
+  .scene{display:block;width:100%;height:auto;position:relative;
     filter:drop-shadow(0 34px 46px rgba(16,48,34,.34));animation:floaty 7s ease-in-out infinite}
 
+  /* live scan sweep across the imagery */
+  .scan{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;border-radius:inherit}
+  .scan::before{content:"";position:absolute;left:0;right:0;height:18%;
+    background:linear-gradient(180deg,transparent,rgba(191,242,74,.09) 62%,rgba(191,242,74,.5) 95%,transparent);
+    animation:sweep 5.2s cubic-bezier(.45,0,.55,1) infinite}
+  .scan::after{content:"";position:absolute;inset:0;opacity:.5;
+    background-image:repeating-linear-gradient(0deg,transparent 0 3px,rgba(191,242,74,.07) 3px 4px);
+    mask-image:radial-gradient(120% 90% at 50% 50%,#000 30%,transparent 78%)}
+  @keyframes sweep{0%{top:-18%;opacity:0}10%{opacity:1}80%{opacity:1}100%{top:104%;opacity:0}}
+
   /* reticle corners */
-  .reticle{position:absolute;inset:2%;pointer-events:none;z-index:4}
+  .reticle{position:absolute;inset:2%;pointer-events:none;z-index:4;transform:translateZ(46px)}
   .reticle i{position:absolute;width:26px;height:26px;border:2px solid var(--lime)}
+  .js .reticle i{opacity:0;transform:scale(.5);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+  .js body.ready .reticle i{opacity:1;transform:none}
+  .js body.ready .reticle i:nth-child(1){transition-delay:.75s}
+  .js body.ready .reticle i:nth-child(2){transition-delay:.85s}
+  .js body.ready .reticle i:nth-child(3){transition-delay:.95s}
+  .js body.ready .reticle i:nth-child(4){transition-delay:1.05s}
   .reticle i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0}
   .reticle i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0}
   .reticle i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0}
   .reticle i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0}
-  .coord{position:absolute;left:9%;bottom:2%;z-index:5;font-family:"Space Mono",monospace;font-size:.66rem;color:var(--muted);letter-spacing:.06em;font-weight:700}
+  .coord{position:absolute;left:9%;bottom:2%;z-index:5;font-family:"Space Mono",monospace;font-size:.66rem;color:var(--muted);letter-spacing:.06em;font-weight:700;transform:translateZ(34px)}
 
   /* floating data chips */
   .chip{position:absolute;z-index:7;background:rgba(10,24,17,.78);backdrop-filter:blur(8px);
@@ -250,13 +280,14 @@
   .chip .k{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim);display:block}
   .chip .v{font-size:.92rem;font-weight:700;display:flex;align-items:center;gap:.4rem;margin-top:.1rem}
   .chip .dot{width:8px;height:8px;border-radius:50%;animation:ping 1.8s ease-out infinite}
-  .chip.c1{top:14%;left:-6%;animation-delay:.2s}
-  .chip.c2{top:40%;right:-8%;animation-delay:1.1s}
-  .chip.c3{bottom:16%;left:-4%;animation-delay:.7s}
+  .chip.c1{top:14%;left:-6%;animation-delay:.2s;--z:78px}
+  .chip.c2{top:40%;right:-8%;animation-delay:1.1s;--z:104px}
+  .chip.c3{bottom:16%;left:-4%;animation-delay:.7s;--z:60px}
   .dot.green{background:var(--lime);box-shadow:0 0 0 0 var(--lime)}
   .dot.orange{background:var(--harvest)}
   .dot.blue{background:var(--sky)}
-  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  /* --z is static per element, so it is evaluated once and never fights the animation */
+  @keyframes floaty{0%,100%{transform:translate3d(0,0,var(--z,0px))}50%{transform:translate3d(0,-10px,var(--z,0px))}}
   @keyframes ping{0%{box-shadow:0 0 0 0 rgba(191,242,74,.6)}100%{box-shadow:0 0 0 9px rgba(191,242,74,0)}}
 
   /* spotlight follow */
@@ -297,7 +328,9 @@
   .about{padding-block:var(--sec)}
   .about .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(2.2rem,5vw,4.5rem);align-items:center}
   .about-visual{position:relative}
-  .globe{aspect-ratio:1;border-radius:50%;position:relative;overflow:hidden;max-width:420px;margin-inline:auto;
+  /* stage is unclipped so the orbital rings are actually visible; the globe itself still clips */
+  .globe-stage{position:relative;width:100%;max-width:420px;margin-inline:auto;aspect-ratio:1}
+  .globe{position:absolute;inset:0;border-radius:50%;overflow:hidden;
     background:radial-gradient(circle at 35% 30%,#16432b,#0a1d14 75%);box-shadow:inset 0 0 60px rgba(0,0,0,.5),var(--shadow)}
   .globe::before{content:"";position:absolute;inset:0;border-radius:50%;
     background:
@@ -308,8 +341,8 @@
   .globe-grid{position:absolute;inset:0;border-radius:50%;opacity:.35;
     background-image:repeating-linear-gradient(0deg,transparent 0 26px,rgba(238,243,230,.18) 26px 27px),repeating-linear-gradient(90deg,transparent 0 26px,rgba(238,243,230,.12) 26px 27px);
     mask:radial-gradient(circle,#000 60%,transparent 78%)}
-  .globe .ring{position:absolute;inset:-12%;border-radius:50%;border:1.5px dashed rgba(191,242,74,.45);animation:spin 26s linear infinite}
-  .globe .ring2{position:absolute;inset:-4%;border-radius:50%;border:1px solid rgba(238,243,230,.18);animation:spin 40s linear infinite reverse}
+  .globe-stage .ring{position:absolute;inset:-12%;border-radius:50%;border:1.5px dashed rgba(191,242,74,.45);animation:spin 26s linear infinite}
+  .globe-stage .ring2{position:absolute;inset:-4%;border-radius:50%;border:1px solid rgba(238,243,230,.18);animation:spin 40s linear infinite reverse}
   .globe .pin{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 4px rgba(191,242,74,.25),0 0 14px var(--lime);animation:ping 2.2s infinite}
   .globe .pin.p1{top:34%;left:40%}.globe .pin.p2{top:58%;left:62%;background:var(--harvest);box-shadow:0 0 0 4px rgba(239,122,44,.25),0 0 14px var(--harvest)}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -442,8 +475,12 @@
   .totop svg{width:20px;height:20px;fill:currentColor}
 
   /* ============ REVEAL ============ */
-  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
-  .reveal.in-view{opacity:1;transform:none}
+  /* Hidden only when JS is present to un-hide it, otherwise the page would stay blank.
+     The hidden state is scoped with :not(.in-view) so that once revealed the rule stops
+     declaring `transform` entirely - otherwise it outranks every card :hover/tilt
+     transform further up the sheet and silently cancels them. */
+  .js .reveal{transition:opacity var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out);transition-delay:var(--d,0s)}
+  .js .reveal:not(.in-view){opacity:0;transform:translateY(34px)}
 
   /* ============ RESEARCH (GeoAgri-MS-VLM) ============ */
   .muted{color:var(--muted)}
@@ -466,7 +503,7 @@
   .prob h3{font-size:clamp(1.5rem,3vw,2.1rem);margin:.7rem 0 .8rem}
   .prob .muted{font-size:.96rem}
   .spectral{display:flex;gap:5px;align-items:flex-end;height:140px;margin-bottom:1.1rem}
-  .band{flex:1;border-radius:5px 5px 0 0;position:relative;transform-origin:bottom;animation:bandPulse 3s ease-in-out infinite;min-width:0}
+  .band{flex:1;border-radius:5px 5px 0 0;position:relative;transform-origin:bottom;min-width:0}
   .band span{position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);font-family:"Space Mono",monospace;font-size:.52rem;color:var(--muted);white-space:nowrap}
   .band.rgb::after{content:"";position:absolute;inset:0;border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 2px rgba(12,36,24,.42)}
   @keyframes bandPulse{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.9)}}
@@ -556,6 +593,132 @@
     .spectral{height:108px}
   }
 
+  /* ============================================================
+     MOTION LAYER
+     Everything below is additive polish. It is placed last so the
+     interaction states here win over the base card :hover rules.
+     ============================================================ */
+
+  /* scanH was animated on the brand mark but never defined - define it */
+  @keyframes scanH{0%{left:-45%}60%,100%{left:135%}}
+
+  /* ---- BOOT / INTRO ---- */
+  .boot{display:none}
+  .js .boot{display:grid;position:fixed;inset:0;z-index:10001;place-content:center;justify-items:center;gap:1.3rem;
+    background:var(--ink);clip-path:inset(0 0 0 0);transition:clip-path .85s var(--ease-io),opacity .45s ease .35s}
+  .js body.booted .boot{clip-path:inset(0 0 100% 0);opacity:0;pointer-events:none}
+  .js body.boot-done .boot{display:none}
+  .js body.booting{overflow:hidden}
+  .boot-mark{width:76px;height:76px;border-radius:22px;background:rgba(191,242,74,.08);
+    border:1px solid rgba(191,242,74,.22);display:grid;place-items:center;position:relative;overflow:hidden}
+  .boot-mark svg{width:40px;height:40px;fill:var(--lime)}
+  .boot-mark::after{content:"";position:absolute;left:-45%;top:0;width:38%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(191,242,74,.6),transparent);animation:scanH 1.5s ease-in-out infinite}
+  .boot-bar{width:190px;height:2px;background:rgba(238,243,230,.14);border-radius:2px;overflow:hidden}
+  .boot-bar i{display:block;height:100%;background:var(--lime);transform:scaleX(0);transform-origin:left;
+    animation:bootfill 1.2s var(--ease-io) forwards}
+  @keyframes bootfill{to{transform:scaleX(1)}}
+  .boot-txt{font-family:"Space Mono",monospace;font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;color:var(--cream-dim)}
+
+  /* ---- MASKED WORD REVEAL ---- */
+  /* padding/negative-margin pairs keep the layout box identical while giving the
+     clip box room for descenders (g, y, p) and italic overhang */
+  .w{display:inline-block;overflow:hidden;vertical-align:top;
+     padding:.02em .12em .14em;margin:-.02em -.12em -.14em}
+  .wi{display:inline-block;transform:translateY(108%);transition:transform var(--dur-2) var(--ease-out);transition-delay:var(--wd,0s)}
+  .lit .wi{transform:none}
+
+  /* ---- NAV SCROLL PROGRESS ---- */
+  .nav-prog{position:absolute;left:0;bottom:-1px;height:2px;width:100%;z-index:5;pointer-events:none;
+    transform:scaleX(var(--p,0));transform-origin:left;opacity:0;transition:opacity .35s;
+    background:linear-gradient(90deg,var(--leaf),var(--lime))}
+  header.nav.scrolled .nav-prog{opacity:1}
+
+  /* ---- SECTION RHYTHM: dark sections read as inset panels ---- */
+  section.dark{border-radius:clamp(26px,4vw,46px);overflow:hidden}
+  section.dark::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;z-index:3;
+    background:linear-gradient(90deg,transparent,rgba(191,242,74,.45),transparent)}
+
+  /* ---- GLOBE: radar sweep + orbiting satellite ---- */
+  .globe .radar{position:absolute;inset:0;border-radius:50%;pointer-events:none;animation:spin 9s linear infinite;
+    background:conic-gradient(from 0deg,rgba(191,242,74,.32),rgba(191,242,74,.10) 7%,rgba(191,242,74,.03) 15%,transparent 24%);
+    mask:radial-gradient(circle,#000 38%,rgba(0,0,0,.55) 62%,transparent 76%)}
+  .orbit{position:absolute;inset:-12%;border-radius:50%;pointer-events:none;animation:spin 18s linear infinite}
+  .orbit i{position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;
+    background:var(--cream);box-shadow:0 0 12px rgba(238,243,230,.85)}
+  .globe .pin.p3{top:46%;left:28%;background:var(--sky);box-shadow:0 0 0 4px rgba(52,189,214,.25),0 0 14px var(--sky);animation-delay:.7s}
+  .globe .pin.p4{top:66%;left:46%;animation-delay:1.4s}
+
+  /* ---- SPECTRAL CHART: bars build, then idle ---- */
+  .js .band{transform:scaleY(0);transition:transform .9s var(--ease-out);transition-delay:var(--bd,0s)}
+  .js .spectral.in-view .band{transform:scaleY(1)}
+  .band.pulse{animation:bandPulse 3s ease-in-out infinite;transition:none}
+  .band{cursor:help}
+  .band::before{content:attr(data-t);position:absolute;bottom:calc(100% + 10px);left:50%;z-index:6;
+    transform:translateX(-50%) translateY(5px);background:var(--ink);color:var(--cream);
+    font-family:"Space Mono",monospace;font-size:.62rem;letter-spacing:.03em;padding:.4rem .6rem;border-radius:8px;
+    white-space:nowrap;opacity:0;pointer-events:none;box-shadow:var(--shadow-sm);transition:opacity .22s,transform .22s}
+  .band:hover::before{opacity:1;transform:translateX(-50%)}
+
+  /* ---- PIPELINE: sequential light-up (":not" so hover stays untouched once lit) ---- */
+  .js .arch .node{transition:opacity .6s var(--ease-out),transform .6s var(--ease-out),background .35s}
+  .js .arch .node:not(.lit){opacity:0;transform:translateY(20px)}
+  .js .arch .node.lit{box-shadow:0 0 0 0 rgba(191,242,74,.45);animation:nodePop .9s var(--ease-out)}
+  @keyframes nodePop{0%{box-shadow:0 0 0 0 rgba(191,242,74,.5)}100%{box-shadow:0 0 0 14px rgba(191,242,74,0)}}
+
+  /* ---- STAT: glow flash when the count lands ---- */
+  .stat .num.done{animation:numglow .9s ease-out}
+  @keyframes numglow{0%{text-shadow:0 0 0 rgba(191,242,74,0)}28%{text-shadow:0 0 26px rgba(191,242,74,.8)}100%{text-shadow:0 0 0 rgba(191,242,74,0)}}
+
+  /* ---- FOUNDER PROFILE LINKS ---- */
+  .flinks{display:flex;gap:.42rem;margin-top:.6rem;flex-wrap:wrap}
+  .flinks a{width:31px;height:31px;display:grid;place-items:center;border:1px solid var(--line-dark);
+    border-radius:9px;position:relative;transition:transform .3s var(--ease-out),background .3s,border-color .3s}
+  .flinks svg{width:15px;height:15px;fill:var(--cream-dim);transition:fill .3s}
+  .flinks a:hover{background:var(--lime);border-color:var(--lime);transform:translateY(-3px)}
+  .flinks a:hover svg{fill:var(--ink)}
+  /* tooltip sits below the row - above would cover the founder's subtitle line */
+  .flinks a::after{content:attr(data-t);position:absolute;top:calc(100% + 8px);left:50%;z-index:8;
+    transform:translateX(-50%) translateY(-4px);background:#08130d;color:var(--cream);
+    border:1px solid var(--line-dark);font-family:"Space Mono",monospace;font-size:.58rem;letter-spacing:.1em;
+    text-transform:uppercase;padding:.3rem .5rem;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;
+    transition:opacity .25s,transform .25s}
+  .flinks a:hover::after,.flinks a:focus-visible::after{opacity:1;transform:translateX(-50%)}
+
+  /* ---- POINTER-ONLY EFFECTS ---- */
+  @media (hover:hover) and (pointer:fine){
+    /* card tilt + cursor-tracked glow */
+    .tilt{position:relative;transition:transform .5s var(--ease-out),box-shadow .4s,border-color .4s}
+    .tilt.is-tilting{transition:box-shadow .4s,border-color .4s;
+      transform:perspective(900px) rotateX(calc(var(--rx,0)*1deg)) rotateY(calc(var(--ry,0)*1deg)) translateY(-8px) scale(1.015)}
+    .tilt::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;opacity:0;
+      transition:opacity .4s;background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(191,242,74,.18),transparent 62%)}
+    .tilt.is-tilting::after{opacity:1}
+    .sdg-card.tilt::after{background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.24),transparent 62%)}
+    /* inner elements drift against the tilt - only on nodes with no competing hover transform */
+    .tilt .med,.tilt .n,.tilt .num,.tilt .rn{
+      transform:translate3d(calc(var(--ry,0)*-.8px),calc(var(--rx,0)*.8px),0);
+      transition:transform .5s var(--ease-out)}
+    .tilt.is-tilting .med,.tilt.is-tilting .n,.tilt.is-tilting .num,.tilt.is-tilting .rn{transition:none}
+
+    /* reticle cursor - native cursor is only hidden inside the hero scope */
+    .cur{position:fixed;left:0;top:0;z-index:9998;pointer-events:none;width:38px;height:38px;margin:-19px 0 0 -19px;
+      opacity:0;transition:opacity .3s,width .28s var(--ease-out),height .28s var(--ease-out),margin .28s var(--ease-out)}
+    .cur.on{opacity:1}
+    .cur.hot{width:60px;height:60px;margin:-30px 0 0 -30px}
+    .cur b{position:absolute;width:9px;height:9px;border:2px solid var(--lime)}
+    .cur b:nth-child(1){top:0;left:0;border-right:0;border-bottom:0}
+    .cur b:nth-child(2){top:0;right:0;border-left:0;border-bottom:0}
+    .cur b:nth-child(3){bottom:0;left:0;border-right:0;border-top:0}
+    .cur b:nth-child(4){bottom:0;right:0;border-left:0;border-top:0}
+    .cur .xh{position:absolute;inset:0;opacity:0;transition:opacity .3s}
+    .cur .xh::before,.cur .xh::after{content:"";position:absolute;background:var(--lime);opacity:.8}
+    .cur .xh::before{left:50%;top:-15px;bottom:-15px;width:1px;margin-left:-.5px}
+    .cur .xh::after{top:50%;left:-15px;right:-15px;height:1px;margin-top:-.5px}
+    .cur.aim .xh{opacity:1}
+    .scope.aiming{cursor:none}
+  }
+
   /* ============ RESPONSIVE ============ */
   @media (max-width:1024px){
     .hero .wrap,.about .wrap{grid-template-columns:1fr}
@@ -588,6 +751,17 @@
     .hero-meta{gap:1.2rem}
     .chip.c1{left:0}.chip.c2{right:0}.chip.c3{left:0}
   }
+  /* the nav CTA crowds the wordmark on narrow phones - move it into the menu instead */
+  .menu-cta{display:none}
+  @media (max-width:768px){
+    .menu-cta{display:inline-flex;align-items:center;gap:.5rem;color:var(--leaf)!important;font-weight:600}
+  }
+  @media (max-width:560px){
+    .nav-actions .btn{display:none}
+    .brand{font-size:1.22rem}
+    .brand .mark{width:33px;height:33px;border-radius:10px}
+    .brand .mark svg{width:19px;height:19px}
+  }
   @media (max-width:400px){
     .m-grid,.steps{grid-template-columns:1fr}
     .hero-actions .btn{width:100%;justify-content:center}
@@ -595,12 +769,26 @@
 
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none!important;transition:none!important}
-    .reveal,.pre,.scope{opacity:1!important;transform:none!important}
+    .reveal,.pre,.scope,.scope-3d,.wi,.band,.arch .node,.reticle i,.tilt,.tilt .med,.tilt .n,.tilt .num,.tilt .rn{
+      opacity:1!important;transform:none!important}
+    .boot,.cur,.scan,.orbit,.globe .radar{display:none!important}
+    .tilt::after{opacity:0!important}
+    .nav-prog{opacity:0!important}
   }
 </style>
 </head>
 <body>
 <a href="#home" class="skip">Skip to content</a>
+
+<!-- boot / acquisition intro (only ever rendered when JS can dismiss it) -->
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot-mark"><svg viewBox="0 0 24 24"><path d="M5 19C5 11 11 5 19 5c0 8-6 14-14 14Zm2.2-2.2c4.6-.6 8-4 8.6-8.6-4.6.6-8 4-8.6 8.6Z"/></svg></div>
+  <div class="boot-bar"><i></i></div>
+  <div class="boot-txt">Acquiring orbit · 13-band scan</div>
+</div>
+
+<!-- reticle cursor -->
+<div class="cur" id="cur" aria-hidden="true"><span class="xh"></span><b></b><b></b><b></b><b></b></div>
 
 <!-- grain overlay -->
 <svg class="grain" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
@@ -641,12 +829,14 @@
       <a href="#impact">Impact</a>
       <a href="https://techshoor.com/" target="_blank" rel="noopener">Blog</a>
       <a href="#contact">Contact</a>
+      <a class="menu-cta" href="https://portal.techshoor.com/" target="_blank" rel="noopener">Live Demos <span class="arr">→</span></a>
     </nav>
     <div class="nav-actions">
       <a class="btn" href="https://portal.techshoor.com/" target="_blank" rel="noopener">Live Demos <span class="arr">→</span></a>
       <button class="hamburger" id="ham" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
+  <span class="nav-prog" id="navProg" aria-hidden="true"></span>
 </header>
 
 <main>
@@ -662,7 +852,7 @@
     <div class="wrap">
       <div class="hero-copy">
         <span class="eyebrow pre d1">Applied research · Satellite imagery × Deep learning</span>
-        <h1 class="display pre d2">We research how AI <span class="ital accent">reads</span> the land.</h1>
+        <h1 class="display">We research how AI <span class="ital accent">reads</span> the land.</h1>
         <p class="tag pre d3">// From orbit to insight - openly.</p>
         <p class="lead pre d4">TechShoor Agri is an applied research group working at the intersection of remote sensing, deep learning and agriculture. We build multi-spectral models, crop-disease detectors and open benchmarks that read the signals nature already sends - from orbit.</p>
         <div class="hero-actions pre d5">
@@ -680,12 +870,17 @@
       <!-- SCAN VISUAL -->
       <div class="scope" id="scope">
         <div class="spot" id="spot"></div>
-        <img class="scene" src="image.png" width="1472" height="840" fetchpriority="high" decoding="async" alt="Layered multi-spectral satellite analysis of farmland — imagery, land-cover and vegetation-stress planes captured from orbit." />
-        <div class="reticle" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <div class="coord">31.5204°N 74.3587°E · Punjab</div>
-        <div class="chip c1"><span class="k">NDVI · Vigor</span><span class="v"><span class="dot green"></span>0.81 Healthy</span></div>
-        <div class="chip c2"><span class="k">Tomato · Zone 4</span><span class="v"><span class="dot orange"></span>Late Blight</span></div>
-        <div class="chip c3"><span class="k">Soil moisture</span><span class="v"><span class="dot blue"></span>Stress: Low</span></div>
+        <div class="scope-3d" id="scope3d">
+          <div class="scene-wrap">
+            <img class="scene" src="image.png" width="1472" height="840" fetchpriority="high" decoding="async" alt="Layered multi-spectral satellite analysis of farmland — imagery, land-cover and vegetation-stress planes captured from orbit." />
+            <div class="scan" aria-hidden="true"></div>
+          </div>
+          <div class="reticle" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <div class="coord">31.5204°N 74.3587°E · Punjab</div>
+          <div class="chip c1"><span class="k">NDVI · Vigor</span><span class="v"><span class="dot green"></span><span class="count" data-to="0.81" data-dec="2">0.81</span> Healthy</span></div>
+          <div class="chip c2"><span class="k">Tomato · Zone 4</span><span class="v"><span class="dot orange"></span>Late Blight</span></div>
+          <div class="chip c3"><span class="k">Soil moisture</span><span class="v"><span class="dot blue"></span>Stress: Low</span></div>
+        </div>
       </div>
     </div>
   </section>
@@ -724,10 +919,14 @@
     </div>
     <div class="wrap">
       <div class="about-visual reveal">
-        <div class="globe">
-          <div class="ring"></div><div class="ring2"></div>
-          <div class="globe-grid"></div>
-          <div class="pin p1"></div><div class="pin p2"></div>
+        <div class="globe-stage">
+          <div class="globe">
+            <div class="globe-grid"></div>
+            <div class="radar" aria-hidden="true"></div>
+            <div class="pin p1"></div><div class="pin p2"></div><div class="pin p3"></div><div class="pin p4"></div>
+          </div>
+          <div class="ring" aria-hidden="true"></div><div class="ring2" aria-hidden="true"></div>
+          <div class="orbit" aria-hidden="true"><i></i></div>
         </div>
         <div class="about-chip a1">Sentinel-2 · <b>13 bands</b></div>
         <div class="about-chip a2">Punjab · Sindh · <b>KP</b></div>
@@ -736,9 +935,6 @@
         <span class="eyebrow">Who we are</span>
         <h2 class="sec-title" style="margin:1rem 0 1.1rem">An applied research group for <span class="ital accent-lime">geospatial agriculture</span>.</h2>
         <p class="lead">TechShoor Agri sits at the intersection of remote sensing, deep learning and agriculture. We're not selling a product - we're researching one: building multi-spectral models, disease detectors and open benchmarks, and partnering with researchers and institutions to turn satellite data into agricultural insight for Pakistan and beyond.</p>
-        <div class="founders">
-          <div class="founder"><div class="avatar"><span>MA</span></div><div class="fi"><h4>Muhammad Azhar</h4><span>Founder · MS AI, FAST-NUCES Karachi</span></div></div>
-        </div>
       </div>
     </div>
   </section>
@@ -894,7 +1090,7 @@
         <div class="stat reveal" style="--d:0s"><div class="num"><span class="count" data-to="733" data-dec="0">0</span><span class="aff">M</span></div><p>people face hunger worldwide</p><span class="bar"></span></div>
         <div class="stat reveal" style="--d:.08s"><div class="num"><span class="count" data-to="70" data-dec="0">0</span><span class="aff">%</span></div><p>of global freshwater withdrawals go to agriculture</p><span class="bar"></span></div>
         <div class="stat reveal" style="--d:.16s"><div class="num"><span class="count" data-to="40" data-dec="0">0</span><span class="aff">%</span></div><p>of crop production is lost to pests &amp; diseases each year</p><span class="bar"></span></div>
-        <div class="stat reveal" style="--d:.24s"><div class="num"><span class="count" data-to="1" data-dec="0">0</span><span class="aff">B&nbsp;t</span></div><p>of food is wasted every single year</p><span class="bar"></span></div>
+        <div class="stat reveal" style="--d:.24s"><div class="num"><span class="count" data-to="1.05" data-dec="2">0</span><span class="aff">B&nbsp;t</span></div><p>of food is wasted every single year</p><span class="bar"></span></div>
       </div>
     </div>
   </section>
@@ -1042,10 +1238,42 @@
 <script>
 (function(){
   "use strict";
+  var doc = document, body = doc.body;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine   = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+  var rich   = fine && !reduce;                 /* pointer-driven extras */
+  function $(s,c){ return (c||doc).querySelector(s); }
+  function $$(s,c){ return Array.prototype.slice.call((c||doc).querySelectorAll(s)); }
+
+  /* ---------------- one scroll ticker for every scroll-driven effect ---------------- */
+  var scrollFx = [], scrollQueued = false, docMax = 0;
+  function runScroll(){
+    var y = window.scrollY || window.pageYOffset, vh = window.innerHeight;
+    for(var i=0;i<scrollFx.length;i++) scrollFx[i](y,vh);
+    scrollQueued = false;
+  }
+  function queueScroll(){ if(!scrollQueued){ scrollQueued = true; requestAnimationFrame(runScroll); } }
+  function measure(){ docMax = doc.documentElement.scrollHeight - window.innerHeight; }
+  window.addEventListener("scroll", queueScroll, {passive:true});
+  window.addEventListener("resize", function(){ measure(); queueScroll(); }, {passive:true});
+  window.addEventListener("load", function(){ measure(); queueScroll(); });
+
+  /* ---------------- one pointer ticker ---------------- */
+  var pointerFx = [], pQueued = false, ptrX = 0, ptrY = 0;
+  function runPointer(){ for(var i=0;i<pointerFx.length;i++) pointerFx[i](ptrX,ptrY); pQueued = false; }
+  if(rich){
+    window.addEventListener("pointermove", function(e){
+      ptrX = e.clientX; ptrY = e.clientY;
+      if(!pQueued){ pQueued = true; requestAnimationFrame(runPointer); }
+    }, {passive:true});
+  }
+
+  /* ---------------- deferred until the intro finishes ---------------- */
+  var readyFns = [];
+  function onReady(fn){ readyFns.push(fn); }
 
   /* year */
-  document.getElementById("year").textContent = new Date().getFullYear();
+  var yEl = doc.getElementById("year"); if(yEl) yEl.textContent = new Date().getFullYear();
 
   /* mobile nav */
   var ham = document.getElementById("ham"), menu = document.getElementById("menu");
@@ -1063,44 +1291,85 @@
     if(menu.classList.contains("open") && !menu.contains(e.target) && !ham.contains(e.target)) closeMenu();
   });
 
-  /* sticky header + totop */
-  var nav = document.getElementById("nav"), totop = document.getElementById("totop");
-  function onScroll(){
-    var y = window.scrollY;
+  /* sticky header + scroll progress + totop */
+  var nav = document.getElementById("nav"), totop = document.getElementById("totop"), navProg = document.getElementById("navProg");
+  scrollFx.push(function(y){
     nav.classList.toggle("scrolled", y > 12);
     totop.classList.toggle("show", y > 600);
-  }
-  window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+    if(navProg) navProg.style.setProperty("--p", docMax > 0 ? Math.min(y/docMax,1).toFixed(4) : "0");
+  });
   totop.addEventListener("click", function(){ window.scrollTo({top:0, behavior: reduce ? "auto" : "smooth"}); });
 
-  /* reveal + stat count-up */
-  var counted = false;
+  /* ---------------- masked word-by-word headline reveal ----------------
+     Recurses into element children so inner styling spans survive intact. */
+  function splitWords(el){
+    if(!el || el.dataset.split) return;
+    el.dataset.split = "1";
+    var idx = 0;
+    (function walk(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if(n.nodeType === 3){
+          if(!n.nodeValue.trim()) return;              /* keep pure-whitespace nodes as-is */
+          var frag = doc.createDocumentFragment();
+          n.nodeValue.split(/(\s+)/).forEach(function(part){
+            if(!part) return;
+            if(/^\s+$/.test(part)){ frag.appendChild(doc.createTextNode(" ")); return; }
+            var outer = doc.createElement("span"); outer.className = "w";
+            var inner = doc.createElement("span"); inner.className = "wi";
+            inner.textContent = part;
+            inner.style.setProperty("--wd", (idx++ * 0.045).toFixed(3) + "s");
+            outer.appendChild(inner);
+            frag.appendChild(outer);
+          });
+          node.replaceChild(frag, n);
+        } else if(n.nodeType === 1){ walk(n); }
+      });
+    })(el);
+    el.classList.add("split");
+  }
+  var heroH1 = $(".hero-copy h1");
+  if(!reduce){
+    $$("h1.display, .sec-title, .prob h3, .arch h3, .cap-head h3, .bench h3, .cta h3").forEach(splitWords);
+  }
+
+  /* ---------------- count-up ---------------- */
   function animateCount(el){
+    if(el.dataset.counted) return;
+    el.dataset.counted = "1";
     var to = parseFloat(el.getAttribute("data-to")),
         dec = parseInt(el.getAttribute("data-dec")||"0",10),
         dur = 1500, start = null;
+    function land(){
+      var n = el.closest ? el.closest(".num") : null;
+      if(n){ n.classList.add("done"); setTimeout(function(){ n.classList.remove("done"); }, 1000); }
+    }
     if(reduce){ el.textContent = to.toFixed(dec); return; }
     function step(t){
       if(!start) start = t;
       var p = Math.min((t-start)/dur, 1),
           e = 1 - Math.pow(1-p, 3);
       el.textContent = (to*e).toFixed(dec);
-      if(p<1) requestAnimationFrame(step); else el.textContent = to.toFixed(dec);
+      if(p<1) requestAnimationFrame(step); else { el.textContent = to.toFixed(dec); land(); }
     }
     requestAnimationFrame(step);
   }
+
+  /* ---------------- reveal / headline / chart / pipeline triggers ---------------- */
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(en){
-      if(en.isIntersecting){
-        en.target.classList.add("in-view");
-        if(en.target.classList.contains("stat")){
-          en.target.querySelectorAll(".count").forEach(animateCount);
-        }
-        io.unobserve(en.target);
-      }
+      if(!en.isIntersecting) return;
+      var t = en.target;
+      t.classList.add("in-view");
+      if(t.classList.contains("split")) t.classList.add("lit");
+      if(t.classList.contains("stat")) $$(".count", t).forEach(animateCount);
+      if(t.id === "spectral") startBands(t);
+      if(t.classList.contains("arch")) litPipeline(t);
+      io.unobserve(t);
     });
   }, {threshold:0.16, rootMargin:"0px 0px -8% 0px"});
-  document.querySelectorAll(".reveal, .stat").forEach(function(el){ io.observe(el); });
+  $$(".reveal, .stat, .split, #spectral").forEach(function(el){
+    if(el !== heroH1) io.observe(el);            /* the hero headline is driven by the intro instead */
+  });
 
   /* scrollspy */
   var links = Array.prototype.slice.call(menu.querySelectorAll('a[href^="#"]'));
@@ -1116,22 +1385,125 @@
     var s = document.getElementById(id); if(s) spy.observe(s);
   });
 
-  /* hero spotlight */
-  var scope = document.getElementById("scope"), spot = document.getElementById("spot");
-  if(scope && spot && !reduce && window.matchMedia("(hover:hover)").matches){
-    scope.addEventListener("mousemove", function(e){
-      var r = scope.getBoundingClientRect();
-      spot.style.left = (e.clientX - r.left) + "px";
-      spot.style.top = (e.clientY - r.top) + "px";
-      spot.style.opacity = "1";
+  /* ---------------- hero: 3D stage, spotlight, scroll parallax ---------------- */
+  var scope = document.getElementById("scope"),
+      scope3d = document.getElementById("scope3d"),
+      spot = document.getElementById("spot");
+  if(scope && scope3d && rich){
+    var inScope = false;
+    scope.addEventListener("pointerenter", function(){
+      inScope = true; scope3d.classList.add("live"); scope.classList.add("aiming");
     });
-    scope.addEventListener("mouseleave", function(){ spot.style.opacity = "0"; });
+    scope.addEventListener("pointerleave", function(){
+      inScope = false; scope3d.classList.remove("live"); scope.classList.remove("aiming");
+      scope3d.style.setProperty("--tx","0deg"); scope3d.style.setProperty("--ty","0deg");
+      if(spot) spot.style.opacity = "0";
+    });
+    pointerFx.push(function(x,y){
+      if(!inScope) return;
+      var r = scope.getBoundingClientRect();
+      var nx = (x - r.left)/r.width - .5, ny = (y - r.top)/r.height - .5;
+      scope3d.style.setProperty("--ty", (nx * 12).toFixed(2)+"deg");
+      scope3d.style.setProperty("--tx", (-ny * 9).toFixed(2)+"deg");
+      if(spot){ spot.style.left = (x-r.left)+"px"; spot.style.top = (y-r.top)+"px"; spot.style.opacity = "1"; }
+    });
+  }
+  if(scope && scope3d && !reduce){
+    scrollFx.push(function(y,vh){
+      var r = scope.getBoundingClientRect();
+      if(r.bottom < 0 || r.top > vh) return;
+      scope3d.style.setProperty("--sy", ((r.top + r.height/2 - vh/2) * -0.06).toFixed(1)+"px");
+    });
   }
 
-  /* tech marquee */
+  /* contour backdrops drift against the scroll */
+  var contours = $$(".contour svg");
+  if(contours.length && !reduce){
+    scrollFx.push(function(y,vh){
+      contours.forEach(function(sv){
+        var p = sv.parentNode.getBoundingClientRect();
+        if(p.bottom < -250 || p.top > vh + 250) return;
+        sv.style.transform = "translate3d(0," + ((p.top - vh/2) * -0.05).toFixed(1) + "px,0)";
+      });
+    });
+  }
+
+  /* ---------------- card tilt + cursor-tracked glow ---------------- */
+  if(rich){
+    var cards = $$(".crop,.svc,.cap,.sdg-card,.m-card,.stat,.rcard");
+    var activeCard = null;
+    cards.forEach(function(c){
+      c.classList.add("tilt");
+      c.addEventListener("pointerenter", function(){ activeCard = c; c.style.willChange = "transform"; });
+      c.addEventListener("pointerleave", function(){
+        if(activeCard === c) activeCard = null;
+        c.classList.remove("is-tilting");
+        c.style.removeProperty("--rx"); c.style.removeProperty("--ry");
+        c.style.willChange = "";
+      });
+    });
+    pointerFx.push(function(x,y){
+      if(!activeCard) return;
+      var r = activeCard.getBoundingClientRect();
+      var nx = (x - r.left)/r.width, ny = (y - r.top)/r.height;
+      activeCard.style.setProperty("--rx", ((.5 - ny) * 9).toFixed(2));
+      activeCard.style.setProperty("--ry", ((nx - .5) * 11).toFixed(2));
+      activeCard.style.setProperty("--mx", (nx*100).toFixed(1)+"%");
+      activeCard.style.setProperty("--my", (ny*100).toFixed(1)+"%");
+      activeCard.classList.add("is-tilting");
+    });
+  }
+
+  /* ---------------- magnetic buttons ---------------- */
+  if(rich){
+    $$(".hero-actions .btn, .cta .btn, .nav-actions .btn").forEach(function(b){
+      var arr = $(".arr", b), inside = false;
+      b.addEventListener("pointerenter", function(){ inside = true; b.style.transition = "transform .12s linear"; });
+      b.addEventListener("pointerleave", function(){
+        inside = false;
+        b.style.transition = ""; b.style.transform = "";
+        if(arr) arr.style.transform = "";
+      });
+      b.addEventListener("pointermove", function(e){
+        if(!inside) return;
+        var r = b.getBoundingClientRect();
+        var dx = e.clientX - (r.left + r.width/2), dy = e.clientY - (r.top + r.height/2);
+        b.style.transform = "translate(" + (dx*0.22).toFixed(1) + "px," + (dy*0.3 - 3).toFixed(1) + "px)";
+        if(arr) arr.style.transform = "translateX(" + (4 + dx*0.06).toFixed(1) + "px)";
+      }, {passive:true});
+    });
+  }
+
+  /* ---------------- reticle cursor ---------------- */
+  if(rich){
+    var cur = document.getElementById("cur");
+    if(cur){
+      var cx=-100, cy=-100, tgx=-100, tgy=-100, curRaf=0, curOn=false, lastHot=null, lastAim=null;
+      function curLoop(){
+        cx += (tgx-cx)*0.22; cy += (tgy-cy)*0.22;
+        cur.style.transform = "translate3d("+cx.toFixed(1)+"px,"+cy.toFixed(1)+"px,0)";
+        curRaf = (Math.abs(tgx-cx) > .2 || Math.abs(tgy-cy) > .2) ? requestAnimationFrame(curLoop) : 0;
+      }
+      window.addEventListener("pointermove", function(e){
+        tgx = e.clientX; tgy = e.clientY;
+        if(!curOn){ curOn = true; cx = tgx; cy = tgy; cur.classList.add("on"); }
+        if(!curRaf) curRaf = requestAnimationFrame(curLoop);
+        var t = e.target;
+        var hot = !!(t && t.closest && t.closest("a,button,.tilt,.band,.pill"));
+        var aim = !!(t && t.closest && t.closest("#scope"));
+        if(hot !== lastHot){ cur.classList.toggle("hot", hot); lastHot = hot; }
+        if(aim !== lastAim){ cur.classList.toggle("aim", aim); lastAim = aim; }
+      }, {passive:true});
+      doc.addEventListener("pointerleave", function(){ cur.classList.remove("on"); curOn = false; });
+      window.addEventListener("blur", function(){ cur.classList.remove("on"); curOn = false; });
+    }
+  }
+
+  /* ---------------- tech marquee ---------------- */
   var tech = ["PyTorch","Hugging Face","Transformers","PEFT","bitsandbytes · QLoRA","TorchGeo","rasterio","rioxarray","GDAL","STAC API","Hydra","Weights & Biases","scikit-learn","NumPy","Matplotlib","DVC","Sentinel-2","Prithvi-EO 2.0","Qwen2.5-VL","Python"];
   function fill(elId, list){
     var el = document.getElementById(elId);
+    if(!el) return;
     var html = "";
     // duplicate the list for a seamless -50% loop
     for(var k=0;k<2;k++){
@@ -1142,19 +1514,84 @@
   fill("m1", tech);
   fill("m2", tech.slice().reverse());
 
-  /* spectral band chart (13 Sentinel-2 bands) */
+  /* marquee reacts to scroll direction */
+  if(!reduce){
+    var m1 = document.getElementById("m1"), m2 = document.getElementById("m2"), lastY = 0, lastDown = null;
+    scrollFx.push(function(y){
+      var down = y >= lastY; lastY = y;
+      if(down === lastDown) return;
+      lastDown = down;
+      if(m1) m1.style.animationDirection = down ? "normal"  : "reverse";
+      if(m2) m2.style.animationDirection = down ? "reverse" : "normal";
+    });
+  }
+
+  /* ---------------- spectral band chart (13 Sentinel-2 bands) ----------------
+     Central wavelengths and native ground resolutions are the real S2A values. */
   var bands = [
-    {l:"B1",c:"#6d5bd0",h:40},{l:"B2",c:"#2f6bd6",h:62,rgb:1},{l:"B3",c:"#46b06c",h:72,rgb:1},
-    {l:"B4",c:"#e0483c",h:66,rgb:1},{l:"B5",c:"#f2873c",h:82},{l:"B6",c:"#f56a2c",h:90},
-    {l:"B7",c:"#ee5a3a",h:94},{l:"B8",c:"#d63f5a",h:100},{l:"B8A",c:"#c4365f",h:96},
-    {l:"B9",c:"#a83069",h:58},{l:"B10",c:"#8e2a70",h:46},{l:"B11",c:"#6f2470",h:80},{l:"B12",c:"#531e63",h:72}
+    {l:"B1", c:"#6d5bd0", h:40,  nm:443,  m:60, n:"Coastal aerosol"},
+    {l:"B2", c:"#2f6bd6", h:62,  nm:490,  m:10, n:"Blue",  rgb:1},
+    {l:"B3", c:"#46b06c", h:72,  nm:560,  m:10, n:"Green", rgb:1},
+    {l:"B4", c:"#e0483c", h:66,  nm:665,  m:10, n:"Red",   rgb:1},
+    {l:"B5", c:"#f2873c", h:82,  nm:705,  m:20, n:"Red edge 1"},
+    {l:"B6", c:"#f56a2c", h:90,  nm:740,  m:20, n:"Red edge 2"},
+    {l:"B7", c:"#ee5a3a", h:94,  nm:783,  m:20, n:"Red edge 3"},
+    {l:"B8", c:"#d63f5a", h:100, nm:842,  m:10, n:"NIR"},
+    {l:"B8A",c:"#c4365f", h:96,  nm:865,  m:20, n:"Narrow NIR"},
+    {l:"B9", c:"#a83069", h:58,  nm:945,  m:60, n:"Water vapour"},
+    {l:"B10",c:"#8e2a70", h:46,  nm:1375, m:60, n:"Cirrus / SWIR"},
+    {l:"B11",c:"#6f2470", h:80,  nm:1610, m:20, n:"SWIR 1"},
+    {l:"B12",c:"#531e63", h:72,  nm:2190, m:20, n:"SWIR 2"}
   ];
   var sp = document.getElementById("spectral");
   if(sp){
     sp.innerHTML = bands.map(function(b,i){
-      return '<div class="band'+(b.rgb?' rgb':'')+'" style="height:'+b.h+'%;background:'+b.c+';animation-delay:'+(i*0.12).toFixed(2)+'s"><span>'+b.l+'</span></div>';
+      return '<div class="band'+(b.rgb?' rgb':'')+'" style="height:'+b.h+'%;background:'+b.c+';--bd:'+(i*0.055).toFixed(3)+'s"'
+           + ' data-t="'+b.l+' · '+b.n+' · '+b.nm+' nm · '+b.m+' m"><span>'+b.l+'</span></div>';
     }).join("");
   }
+  function startBands(el){
+    el.classList.add("in-view");
+    if(reduce) return;
+    $$(".band", el).forEach(function(bd,i){
+      setTimeout(function(){ bd.classList.add("pulse"); }, 960 + i*55);
+    });
+  }
+
+  /* ---------------- architecture pipeline lights up left to right ---------------- */
+  function litPipeline(arch){
+    $$(".node", arch).forEach(function(n,i){
+      setTimeout(function(){ n.classList.add("lit"); }, reduce ? 0 : i*220);
+    });
+  }
+
+  /* ---------------- intro / boot ----------------
+     Runs last so every onReady consumer above is registered. The hero must
+     never stay hidden, so there are three independent paths to finish(). */
+  onReady(function(){
+    if(heroH1) heroH1.classList.add("lit");
+    setTimeout(function(){ $$(".chip .count").forEach(animateCount); }, 650);
+  });
+  (function(){
+    var boot = document.getElementById("boot"), done = false;
+    function finish(){
+      if(done) return;
+      done = true;
+      body.classList.remove("booting");
+      body.classList.add("booted","ready");
+      readyFns.forEach(function(f){ try{ f(); }catch(err){} });
+      setTimeout(function(){ body.classList.add("boot-done"); measure(); }, 1000);
+    }
+    if(!boot || reduce){ body.classList.add("ready","boot-done"); finish(); return; }
+    body.classList.add("booting");
+    setTimeout(finish, 1200);
+    window.addEventListener("load", function(){ setTimeout(finish, 200); });
+    doc.addEventListener("keydown", finish, {once:true});   /* never trap a keyboard user */
+    setTimeout(finish, 2600);                               /* hard safety net */
+  })();
+
+  measure();
+  runScroll();
 })();
 </script>
 </body>
